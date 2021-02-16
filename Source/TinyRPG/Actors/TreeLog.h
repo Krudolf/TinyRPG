@@ -3,20 +3,17 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "TinyRPG/Actors/PickUpActor.h"
 #include "TreeLog.generated.h"
 
 UCLASS()
-class TINYRPG_API ATreeLog : public AActor
+class TINYRPG_API ATreeLog : public APickUpActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
 	ATreeLog();
-
-	UPROPERTY(EditAnywhere)
-	UStaticMeshComponent* StaticMesh;
 
 protected:
 	// Called when the game starts or when spawned

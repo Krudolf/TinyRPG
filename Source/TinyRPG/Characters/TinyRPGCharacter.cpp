@@ -3,6 +3,7 @@
 
 #include "TinyRPGCharacter.h"
 #include "DrawDebugHelpers.h"
+#include "TinyRPG/Actors/PickUpActor.h"
 
 #define OUT
 
@@ -102,4 +103,22 @@ void ATinyRPGCharacter::Hit()
 
 		//TODO: Call takeDamage to damage the actor
 	}
+}
+
+void ATinyRPGCharacter::AddToInventory(APickUpActor* AActorPickUp)
+{
+	Inventory.Add(AActorPickUp);
+}
+
+void ATinyRPGCharacter::PrintInventory() const
+{
+	FString InventoryPrint = "";
+
+	for (APickUpActor* ActorPickUp : Inventory)
+	{
+		InventoryPrint.Append(ActorPickUp->Name);
+		InventoryPrint.Append(" | ");
+	}
+
+	GEngine->AddOnScreenDebugMessage(1, 3, FColor::White, *InventoryPrint);
 }

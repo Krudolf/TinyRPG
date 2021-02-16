@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "TinyRPGCharacter.generated.h"
 
+class APickUpActor;
+
 UCLASS()
 class TINYRPG_API ATinyRPGCharacter : public ACharacter
 {
@@ -35,10 +37,17 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	void AddToInventory(APickUpActor* AActorPickUp);
+
+	UFUNCTION(BlueprintCallable)
+	void PrintInventory() const;
+
 private:
 	void MoveForward(float AxisValue);
 	void MoveRight(float AxisValue);
 	bool GetHittedActor(FHitResult& OutHit, FVector& OutHitDirection, float Distance);
 	void Interact();
 	void Hit();
+
+	TArray<APickUpActor*> Inventory;
 };

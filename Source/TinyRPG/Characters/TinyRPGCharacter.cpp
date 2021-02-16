@@ -122,3 +122,8 @@ void ATinyRPGCharacter::PrintInventory() const
 
 	GEngine->AddOnScreenDebugMessage(1, 3, FColor::White, *InventoryPrint);
 }
+
+void ATinyRPGCharacter::UpdateInventory()
+{
+	OnUpdateInventory.Broadcast(Inventory);
+}

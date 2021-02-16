@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "TinyRPGCharacter.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FUpdateInventoryDelegate, const TArray<APickUpActor*>&, InventoryItems);
+
 class APickUpActor;
 
 UCLASS()
@@ -41,6 +43,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void PrintInventory() const;
+
+	UFUNCTION(BlueprintCallable)
+	void UpdateInventory();
+
+	UPROPERTY(BlueprintAssignable)
+	FUpdateInventoryDelegate OnUpdateInventory;
 
 private:
 	void MoveForward(float AxisValue);

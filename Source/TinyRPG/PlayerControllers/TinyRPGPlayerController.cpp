@@ -47,3 +47,23 @@ void ATinyRPGPlayerController::ToggleInventoryVisibility()
 		UWidgetBlueprintLibrary::SetInputMode_GameOnly(this);
 	}
 }
+
+void ATinyRPGPlayerController::CreatePickUpWidget()
+{
+	RemovePickUpWidget();
+
+	PickUp = CreateWidget(this, PickUpClass);
+	if (PickUp != nullptr)
+	{
+		PickUp->AddToViewport();
+	}
+}
+
+void ATinyRPGPlayerController::RemovePickUpWidget()
+{
+	if (PickUp != nullptr)
+	{
+		PickUp->RemoveFromViewport();
+		PickUp = nullptr;
+	}
+}

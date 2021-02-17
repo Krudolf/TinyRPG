@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "CuttableTree.generated.h"
 
-class ATreeLog;
+class APickUpActor;
 
 UCLASS()
 class TINYRPG_API ACuttableTree : public AActor
@@ -28,7 +28,7 @@ protected:
 	float Health = 100.f;
 
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<ATreeLog> TreeLogClass;
+	TSubclassOf<APickUpActor> TreeLogClass;
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 

@@ -46,11 +46,4 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	UBoxComponent* BoxCollider;
 
-	UPROPERTY(EditAnywhere)
-	float RotationSpeed = 0.5f;
-
-	UFUNCTION()
-	void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-
-	virtual void OnInteract();
 };

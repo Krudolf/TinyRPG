@@ -19,6 +19,10 @@ public:
 
 	void ToggleInventoryVisibility();
 
+	void CreatePickUpWidget();
+
+	void RemovePickUpWidget();
+
 private:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UUserWidget> HUDClass;
@@ -26,8 +30,14 @@ private:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UUserWidget> InventoryClass;
 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> PickUpClass;
+
 	UPROPERTY()
 	UUserWidget* HUD;
+
+	UPROPERTY()
+	UUserWidget* PickUp;
 
 	UPROPERTY()
 	UUserWidget* Inventory;

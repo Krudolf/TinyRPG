@@ -10,7 +10,7 @@
 APickUpActor::APickUpActor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	SceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 	RootComponent = SceneComponent;
@@ -28,46 +28,10 @@ APickUpActor::APickUpActor()
 void APickUpActor::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	BoxCollider->OnComponentBeginOverlap.AddDynamic(this, &APickUpActor::OnOverlapBegin);
 }
 
 // Called every frame
 void APickUpActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	AddActorLocalRotation(FRotator(0.f, 180.f, 0.f) * DeltaTime * RotationSpeed);
-}
-
-void APickUpActor::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	if (OtherActor != nullptr && OtherActor != this && OtherComp != nullptr)
-	{
-		OnInteract();
-	}
-}
-
-void APickUpActor::OnInteract()
-{
-	ATinyRPGCharacter* Player = Cast<ATinyRPGCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
-
-	if (Player)
-	{
-		Show(false);
-
-		Player->AddToInventory(this);
-	}
-}
-
-void APickUpActor::Show(bool bVisible)
-{
-	ECollisionEnabled::Type collision = bVisible ? ECollisionEnabled::QueryAndPhysics : ECollisionEnabled::NoCollision;
-
-	this->SetActorTickEnabled(bVisible);
-
-	this->ItemMesh->SetVisibility(bVisible);
-	this->ItemMesh->SetCollisionEnabled(collision);
-
-	this->BoxCollider->SetCollisionEnabled(collision);
 }

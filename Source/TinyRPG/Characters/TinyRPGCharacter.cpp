@@ -5,6 +5,7 @@
 #include "DrawDebugHelpers.h"
 #include "TinyRPG/Actors/PickUpActor.h"
 #include "TinyRPG/PlayerControllers/TinyRPGPlayerController.h"
+#include "Components/CapsuleComponent.h"
 
 #define OUT
 
@@ -25,6 +26,27 @@ void ATinyRPGCharacter::BeginPlay()
 	{
 		PlayerController->CreateInventory();
 	}
+
+	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ATinyRPGCharacter::OnOverlapBegin);
+	GetCapsuleComponent()->OnComponentEndOverlap.AddDynamic(this, &ATinyRPGCharacter::OnOverlapEnd);
+}
+
+void ATinyRPGCharacter::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (OtherActor != nullptr && OtherActor != this && OtherComp != nullptr)
+	{
+		
+		OverlapingPickUpActor = Cast<APickUpActor>(OtherActor);
+		ATinyRPGPlayerController* PlayerController = Cast<ATinyRPGPlayerController>(GetController());
+		PlayerController->CreatePickUpWidget();
+	}
+}
+
+void ATinyRPGCharacter::OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	ATinyRPGPlayerController* PlayerController = Cast<ATinyRPGPlayerController>(GetController());
+	PlayerController->RemovePickUpWidget();
+	OverlapingPickUpActor = nullptr;
 }
 
 // Called every frame
@@ -80,16 +102,12 @@ bool ATinyRPGCharacter::GetHittedActor(FHitResult& OutHit, FVector& OutHitDirect
 
 void ATinyRPGCharacter::Interact()
 {
-	FHitResult Hit;
-	FVector HitDirection;
-	bool bSuccess = GetHittedActor(Hit, HitDirection, InteractionDistance);
-	if (bSuccess)
+	if (OverlapingPickUpActor == nullptr)
 	{
-		DrawDebugPoint(GetWorld(), Hit.Location, 20, FColor::Red, false, 2);
-		UE_LOG(LogTemp, Warning, TEXT("Trying to interact with %s"), *Hit.Actor->GetName());
-
-		//TODO: Interact with the object/NPC
+		return;
 	}
+
+	AddToInventory(OverlapingPickUpActor);
 }
 
 void ATinyRPGCharacter::Hit()
@@ -122,9 +140,15 @@ void ATinyRPGCharacter::ToggleInventory()
 	}
 }
 
-void ATinyRPGCharacter::AddToInventory(APickUpActor* AActorPickUp)
+void ATinyRPGCharacter::AddToInventory(APickUpActor* ActorPickUp)
 {
-	Inventory.Add(AActorPickUp);
+	if (Inventory.Num() == MaxInventoryCapacity)
+	{
+		return;
+	}
+
+	Inventory.Add(ActorPickUp);
+	ActorPickUp->Destroy();
 
 	OnUpdateInventory.Broadcast(Inventory);
 }

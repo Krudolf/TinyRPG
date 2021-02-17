@@ -63,6 +63,7 @@ private:
 	bool GetHittedActor(FHitResult& OutHit, FVector& OutHitDirection, float Distance);
 	void Interact();
 	void Hit();
+	void ToggleInventory();
 
 	TArray<APickUpActor*> Inventory;
 

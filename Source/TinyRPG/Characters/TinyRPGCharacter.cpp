@@ -4,6 +4,7 @@
 #include "TinyRPGCharacter.h"
 #include "DrawDebugHelpers.h"
 #include "TinyRPG/Actors/PickUpActor.h"
+#include "TinyRPG/PlayerControllers/TinyRPGPlayerController.h"
 
 #define OUT
 
@@ -18,15 +19,12 @@ ATinyRPGCharacter::ATinyRPGCharacter()
 void ATinyRPGCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	APlayerController* PlayerController = Cast<APlayerController>(GetController());
-	if (PlayerController)
-	{
-		PlayerController->bShowMouseCursor = true;
-		PlayerController->bEnableClickEvents = true;
-		PlayerController->bEnableMouseOverEvents = true;
-	}
 
+	ATinyRPGPlayerController* PlayerController = Cast<ATinyRPGPlayerController>(GetController());
+	if (PlayerController != nullptr)
+	{
+		PlayerController->CreateInventory();
+	}
 }
 
 // Called every frame
@@ -49,7 +47,8 @@ void ATinyRPGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction(TEXT("Interact"), IE_Pressed, this, &ATinyRPGCharacter::Interact);
 	PlayerInputComponent->BindAction(TEXT("Hit"), IE_Pressed, this, &ATinyRPGCharacter::Hit);
-	PlayerInputComponent->BindAction(TEXT("SelectItem"), IE_Pressed, this, &ATinyRPGCharacter::UseItem);
+	PlayerInputComponent->BindAction(TEXT("Inventory"), IE_Pressed, this, &ATinyRPGCharacter::ToggleInventory);
+	//PlayerInputComponent->BindAction(TEXT("SelectItem"), IE_Pressed, this, &ATinyRPGCharacter::UseItem);
 }
 
 void ATinyRPGCharacter::MoveForward(float AxisValue)
@@ -111,6 +110,15 @@ void ATinyRPGCharacter::Hit()
 		}
 
 		//TODO: Call takeDamage to damage the actor
+	}
+}
+
+void ATinyRPGCharacter::ToggleInventory()
+{
+	ATinyRPGPlayerController* PlayerController = Cast<ATinyRPGPlayerController>(GetController());
+	if (PlayerController != nullptr)
+	{
+		PlayerController->ToggleInventoryVisibility();
 	}
 }
 

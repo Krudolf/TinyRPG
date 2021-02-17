@@ -42,13 +42,16 @@ public:
 	void AddToInventory(APickUpActor* AActorPickUp);
 
 	UFUNCTION(BlueprintCallable)
-	void PrintInventory() const;
+	void UpdateInventory();
 
 	UFUNCTION(BlueprintCallable)
-	void UpdateInventory();
+	void DropToActionBar(APickUpActor* ActorPickUp, int32 MaxItems);
 
 	UPROPERTY(BlueprintAssignable)
 	FUpdateInventoryDelegate OnUpdateInventory;
+
+	UPROPERTY(BlueprintAssignable)
+	FUpdateInventoryDelegate OnUpdateActionBar;
 
 private:
 	void MoveForward(float AxisValue);
@@ -58,4 +61,6 @@ private:
 	void Hit();
 
 	TArray<APickUpActor*> Inventory;
+
+	TArray<APickUpActor*> ActionBar;
 };

@@ -19,6 +19,15 @@ void ATinyRPGCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	APlayerController* PlayerController = Cast<APlayerController>(GetController());
+	if (PlayerController)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Change"));
+		PlayerController->bShowMouseCursor = true;
+		PlayerController->bEnableClickEvents = true;
+		PlayerController->bEnableMouseOverEvents = true;
+	}
+
 }
 
 // Called every frame
@@ -108,22 +117,24 @@ void ATinyRPGCharacter::Hit()
 void ATinyRPGCharacter::AddToInventory(APickUpActor* AActorPickUp)
 {
 	Inventory.Add(AActorPickUp);
-}
 
-void ATinyRPGCharacter::PrintInventory() const
-{
-	FString InventoryPrint = "";
-
-	for (APickUpActor* ActorPickUp : Inventory)
-	{
-		InventoryPrint.Append(ActorPickUp->Name);
-		InventoryPrint.Append(" | ");
-	}
-
-	GEngine->AddOnScreenDebugMessage(1, 3, FColor::White, *InventoryPrint);
+	OnUpdateInventory.Broadcast(Inventory);
 }
 
 void ATinyRPGCharacter::UpdateInventory()
 {
 	OnUpdateInventory.Broadcast(Inventory);
+}
+
+void ATinyRPGCharacter::DropToActionBar(APickUpActor* ActorPickUp, int32 MaxItems)
+{
+	if (ActionBar.Num() == MaxItems)
+	{
+		return;
+	}
+
+	Inventory.Remove(ActorPickUp);
+	ActionBar.Add(ActorPickUp);
+
+	OnUpdateActionBar.Broadcast(ActionBar);
 }

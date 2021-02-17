@@ -7,6 +7,7 @@
 #include "TinyRPGCharacter.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FUpdateInventoryDelegate, const TArray<APickUpActor*>&, InventoryItems);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FUseItemDelegate, APickUpActor*, ActionBarItem);
 
 class APickUpActor;
 
@@ -53,6 +54,9 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FUpdateInventoryDelegate OnUpdateActionBar;
 
+	UPROPERTY(BlueprintAssignable)
+	FUseItemDelegate OnUseItemActionBar;
+
 private:
 	void MoveForward(float AxisValue);
 	void MoveRight(float AxisValue);
@@ -63,4 +67,7 @@ private:
 	TArray<APickUpActor*> Inventory;
 
 	TArray<APickUpActor*> ActionBar;
+
+protected:
+	void UseItem(FKey Key);
 };

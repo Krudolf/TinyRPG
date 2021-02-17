@@ -22,7 +22,6 @@ void ATinyRPGCharacter::BeginPlay()
 	APlayerController* PlayerController = Cast<APlayerController>(GetController());
 	if (PlayerController)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Change"));
 		PlayerController->bShowMouseCursor = true;
 		PlayerController->bEnableClickEvents = true;
 		PlayerController->bEnableMouseOverEvents = true;
@@ -50,6 +49,7 @@ void ATinyRPGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction(TEXT("Interact"), IE_Pressed, this, &ATinyRPGCharacter::Interact);
 	PlayerInputComponent->BindAction(TEXT("Hit"), IE_Pressed, this, &ATinyRPGCharacter::Hit);
+	PlayerInputComponent->BindAction(TEXT("SelectItem"), IE_Pressed, this, &ATinyRPGCharacter::UseItem);
 }
 
 void ATinyRPGCharacter::MoveForward(float AxisValue)
@@ -137,4 +137,23 @@ void ATinyRPGCharacter::DropToActionBar(APickUpActor* ActorPickUp, int32 MaxItem
 	ActionBar.Add(ActorPickUp);
 
 	OnUpdateActionBar.Broadcast(ActionBar);
+}
+
+void ATinyRPGCharacter::UseItem(FKey Key)
+{
+	FText Name = Key.GetDisplayName(false);
+	int32 Number = FCString::Atoi(*Name.ToString());
+
+	if (Number >= 1 && Number <= ActionBar.Num())
+	{
+		auto SelectedItem = ActionBar[Number - 1];
+
+		for (auto Actor : ActionBar)
+		{
+			Actor->bInUse = false;
+		}
+		SelectedItem->bInUse = true;
+
+		OnUseItemActionBar.Broadcast(SelectedItem);
+	}
 }

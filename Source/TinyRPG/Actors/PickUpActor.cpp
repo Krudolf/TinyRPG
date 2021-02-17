@@ -50,8 +50,6 @@ void APickUpActor::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, cla
 
 void APickUpActor::OnInteract()
 {
-	GEngine->AddOnScreenDebugMessage(1, 3, FColor::Red, *Name);
-
 	ATinyRPGCharacter* Player = Cast<ATinyRPGCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
 
 	if (Player)

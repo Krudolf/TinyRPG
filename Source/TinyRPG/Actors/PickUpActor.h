@@ -33,6 +33,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UTexture2D* Image;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool bInUse = false;
+
 protected:
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* SceneComponent;

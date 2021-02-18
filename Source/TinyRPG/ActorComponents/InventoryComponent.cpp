@@ -4,6 +4,7 @@
 #include "InventoryComponent.h"
 #include "TinyRPG/Actors/PickUpActor.h"
 #include "TinyRPG/Characters/TinyRPGCharacter.h"
+#include "Containers/Array.h"
 
 // Sets default values for this component's properties
 UInventoryComponent::UInventoryComponent()
@@ -29,7 +30,6 @@ void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
 }
 
 void UInventoryComponent::AddToInventory(APickUpActor* ActorPickUp)
@@ -39,7 +39,29 @@ void UInventoryComponent::AddToInventory(APickUpActor* ActorPickUp)
 		return;
 	}
 
-	Inventory.Add(ActorPickUp);
+	FInventoryItemStack& ItemStackFound = *(Inventory.FindByPredicate([&](FInventoryItemStack ItemStack)
+	{
+		//return ItemStack.Name == ActorPickUp->Name;
+		return ActorPickUp->bIsStackable && ItemStack.Name == ActorPickUp->Name && ItemStack.Quantity < ActorPickUp->MaxStack;
+	}
+	));
+	
+	if (&ItemStackFound != nullptr)
+	{
+		//UE_LOG(LogTemp, Warning, TEXT("Found stack: %s"), *ItemStackFound.Name);
+		++ItemStackFound.Quantity;
+	}
+	else
+	{
+		//UE_LOG(LogTemp, Warning, TEXT("Stack NOT found, creating it"));
+		FInventoryItemStack ItemStack;
+		ItemStack.Name = ActorPickUp->Name;
+		ItemStack.PickUpActor = ActorPickUp;
+		ItemStack.Quantity = 1;
+
+		Inventory.Add(ItemStack);
+	}
+
 	ActorPickUp->Destroy();
 
 	OnUpdateInventory.Broadcast(Inventory);
@@ -49,4 +71,3 @@ void UInventoryComponent::UpdateInventory()
 {
 	UE_LOG(LogTemp, Warning, TEXT("InventoryComponent->UpdateInventory()"));
 }
-

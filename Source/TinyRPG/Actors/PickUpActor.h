@@ -36,6 +36,12 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bInUse = false;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsStackable = true;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 MaxStack = 8;
+
 protected:
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* SceneComponent;

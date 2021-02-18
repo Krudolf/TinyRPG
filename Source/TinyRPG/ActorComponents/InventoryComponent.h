@@ -4,9 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "TinyRPG/structs/InventoryItemStack.h"
 #include "InventoryComponent.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FUpdateInventoryDelegate, const TArray<APickUpActor*>&, InventoryItems);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FUpdateInventoryDelegate, const TArray<FInventoryItemStack>&, InventoryItems);
 
 class APickUpActor;
 class ATinyRPGCharacter;
@@ -41,7 +42,7 @@ public:
 
 private:
 	UPROPERTY()
-	TArray<APickUpActor*> Inventory;
+	TArray<FInventoryItemStack> Inventory;
 		
 	UPROPERTY()
 	ATinyRPGCharacter* OwnerCharacter;

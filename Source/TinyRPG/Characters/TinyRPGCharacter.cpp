@@ -146,22 +146,3 @@ void ATinyRPGCharacter::ToggleInventory()
 		PlayerController->ToggleInventoryVisibility();
 	}
 }
-
-void ATinyRPGCharacter::UseItem(FKey Key)
-{
-	FText Name = Key.GetDisplayName(false);
-	int32 Number = FCString::Atoi(*Name.ToString());
-
-	if (Number >= 1 && Number <= ActionBar.Num())
-	{
-		auto SelectedItem = ActionBar[Number - 1];
-
-		for (auto Actor : ActionBar)
-		{
-			Actor->bInUse = false;
-		}
-		SelectedItem->bInUse = true;
-
-		//OnUseItemActionBar.Broadcast(SelectedItem);
-	}
-}

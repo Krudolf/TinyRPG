@@ -13,6 +13,7 @@ struct TINYRPG_API FInventoryItemStack
 {
 	GENERATED_BODY()
 
+public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString Name = "";
 
@@ -22,9 +23,4 @@ struct TINYRPG_API FInventoryItemStack
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 Quantity = 0;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool bIsStackable = true;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 MaxStack = 8;
 };

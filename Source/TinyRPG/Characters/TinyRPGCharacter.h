@@ -58,12 +58,6 @@ private:
 	void Hit();
 	void ToggleInventory();
 
-	UPROPERTY()
-	TArray<APickUpActor*> Inventory;
-
-	UPROPERTY()
-	TArray<APickUpActor*> ActionBar;
-
 protected:
 	void UseItem(FKey Key);
 };

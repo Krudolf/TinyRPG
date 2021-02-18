@@ -6,6 +6,7 @@
 #include "TinyRPG/Actors/PickUpActor.h"
 #include "TinyRPG/PlayerControllers/TinyRPGPlayerController.h"
 #include "Components/CapsuleComponent.h"
+#include "TinyRPG/ActorComponents/InventoryComponent.h"
 
 #define OUT
 
@@ -14,6 +15,8 @@ ATinyRPGCharacter::ATinyRPGCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -35,7 +38,6 @@ void ATinyRPGCharacter::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp
 {
 	if (OtherActor != nullptr && OtherActor != this && OtherComp != nullptr)
 	{
-		
 		OverlapingPickUpActor = Cast<APickUpActor>(OtherActor);
 		ATinyRPGPlayerController* PlayerController = Cast<ATinyRPGPlayerController>(GetController());
 		PlayerController->CreatePickUpWidget();
@@ -107,7 +109,12 @@ void ATinyRPGCharacter::Interact()
 		return;
 	}
 
-	AddToInventory(OverlapingPickUpActor);
+	if (InventoryComponent == nullptr)
+	{
+		return;
+	}
+
+	InventoryComponent->AddToInventory(OverlapingPickUpActor);
 }
 
 void ATinyRPGCharacter::Hit()
@@ -140,37 +147,6 @@ void ATinyRPGCharacter::ToggleInventory()
 	}
 }
 
-void ATinyRPGCharacter::AddToInventory(APickUpActor* ActorPickUp)
-{
-	if (Inventory.Num() == MaxInventoryCapacity)
-	{
-		return;
-	}
-
-	Inventory.Add(ActorPickUp);
-	ActorPickUp->Destroy();
-
-	OnUpdateInventory.Broadcast(Inventory);
-}
-
-void ATinyRPGCharacter::UpdateInventory()
-{
-	OnUpdateInventory.Broadcast(Inventory);
-}
-
-void ATinyRPGCharacter::DropToActionBar(APickUpActor* ActorPickUp, int32 MaxItems)
-{
-	if (ActionBar.Num() == MaxItems)
-	{
-		return;
-	}
-
-	Inventory.Remove(ActorPickUp);
-	ActionBar.Add(ActorPickUp);
-
-	OnUpdateActionBar.Broadcast(ActionBar);
-}
-
 void ATinyRPGCharacter::UseItem(FKey Key)
 {
 	FText Name = Key.GetDisplayName(false);
@@ -186,6 +162,6 @@ void ATinyRPGCharacter::UseItem(FKey Key)
 		}
 		SelectedItem->bInUse = true;
 
-		OnUseItemActionBar.Broadcast(SelectedItem);
+		//OnUseItemActionBar.Broadcast(SelectedItem);
 	}
 }

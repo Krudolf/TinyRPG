@@ -6,10 +6,8 @@
 #include "GameFramework/Character.h"
 #include "TinyRPGCharacter.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FUpdateInventoryDelegate, const TArray<APickUpActor*>&, InventoryItems);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FUseItemDelegate, APickUpActor*, ActionBarItem);
-
 class APickUpActor;
+class UInventoryComponent;
 
 UCLASS()
 class TINYRPG_API ATinyRPGCharacter : public ACharacter
@@ -20,9 +18,6 @@ public:
 	// Sets default values for this character's properties
 	ATinyRPGCharacter();
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	int32 MaxInventoryCapacity = 6;
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -32,6 +27,9 @@ protected:
 
 	UFUNCTION()
 	void OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UInventoryComponent* InventoryComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float InteractionDistance = 600.f;
@@ -49,23 +47,6 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	void AddToInventory(APickUpActor* ActorPickUp);
-
-	UFUNCTION(BlueprintCallable)
-	void UpdateInventory();
-
-	UFUNCTION(BlueprintCallable)
-	void DropToActionBar(APickUpActor* ActorPickUp, int32 MaxItems);
-
-	UPROPERTY(BlueprintAssignable)
-	FUpdateInventoryDelegate OnUpdateInventory;
-
-	UPROPERTY(BlueprintAssignable)
-	FUpdateInventoryDelegate OnUpdateActionBar;
-
-	UPROPERTY(BlueprintAssignable)
-	FUseItemDelegate OnUseItemActionBar;
-
 	UPROPERTY(BlueprintReadOnly)
 	APickUpActor* OverlapingPickUpActor;
 
@@ -77,8 +58,10 @@ private:
 	void Hit();
 	void ToggleInventory();
 
+	UPROPERTY()
 	TArray<APickUpActor*> Inventory;
 
+	UPROPERTY()
 	TArray<APickUpActor*> ActionBar;
 
 protected:

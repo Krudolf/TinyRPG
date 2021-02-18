@@ -9,18 +9,11 @@
 
 void ATinyRPGPlayerController::CreateInventory()
 {
-	HUD = CreateWidget(this, HUDClass);
-	if (HUD != nullptr)
+	Inventory = CreateWidget(this, InventoryClass);
+	if (Inventory != nullptr)
 	{
-		HUD->AddToViewport();
-		TArray<UUserWidget*> FoundWidgets;
-		UWidgetBlueprintLibrary::GetAllWidgetsOfClass(GetWorld(), OUT FoundWidgets, InventoryClass, false);
-
-		if (FoundWidgets.Num() > 0)
-		{
-			Inventory = FoundWidgets[0];
-			Inventory->SetVisibility(ESlateVisibility::Hidden);
-		}
+		Inventory->AddToViewport();
+		Inventory->SetVisibility(ESlateVisibility::Hidden);
 	}
 }
 

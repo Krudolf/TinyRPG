@@ -46,4 +46,6 @@ private:
 		
 	UPROPERTY()
 	ATinyRPGCharacter* OwnerCharacter;
+
+	void AddNewObjectToInventory(APickUpActor* ActorPickUp);
 };

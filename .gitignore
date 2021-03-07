@@ -83,3 +83,6 @@ Content/StarterContent/*
 VSCode Files
 /.vscode/*
 TinyRPG.code-workspace
+
+Rider
+/.idea/*

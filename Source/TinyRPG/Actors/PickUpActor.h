@@ -31,7 +31,7 @@ public:
 	FString Name;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UTexture2D* Image;
+	TAssetPtr<UTexture2D> Image;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bInUse = false;

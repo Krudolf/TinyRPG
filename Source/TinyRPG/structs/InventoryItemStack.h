@@ -23,4 +23,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 Quantity = 0;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TAssetPtr<UTexture2D> Image;
+
 };

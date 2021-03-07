@@ -39,29 +39,29 @@ void UInventoryComponent::AddToInventory(APickUpActor* ActorPickUp)
 		return;
 	}
 
-	FInventoryItemStack& ItemStackFound = *(Inventory.FindByPredicate([&](FInventoryItemStack ItemStack)
+	if(ActorPickUp->bIsStackable)
 	{
-		//return ItemStack.Name == ActorPickUp->Name;
-		return ActorPickUp->bIsStackable && ItemStack.Name == ActorPickUp->Name && ItemStack.Quantity < ActorPickUp->MaxStack;
-	}
-	));
+		FInventoryItemStack& ItemStackFound = *(Inventory.FindByPredicate([&](FInventoryItemStack const ItemStack)
+		    {
+		        return ItemStack.Name == ActorPickUp->Name && ItemStack.Quantity < ActorPickUp->MaxStack;
+		    }
+		));
 	
-	if (&ItemStackFound != nullptr)
-	{
-		//UE_LOG(LogTemp, Warning, TEXT("Found stack: %s"), *ItemStackFound.Name);
-		++ItemStackFound.Quantity;
+		if (&ItemStackFound != nullptr)
+		{
+			//UE_LOG(LogTemp, Warning, TEXT("Found stack: %s"), *ItemStackFound.Name);
+			++ItemStackFound.Quantity;
+		}
+		else
+		{
+			AddNewObjectToInventory(ActorPickUp);
+		}
 	}
 	else
 	{
-		//UE_LOG(LogTemp, Warning, TEXT("Stack NOT found, creating it"));
-		FInventoryItemStack ItemStack;
-		ItemStack.Name = ActorPickUp->Name;
-		ItemStack.PickUpActor = ActorPickUp;
-		ItemStack.Quantity = 1;
-
-		Inventory.Add(ItemStack);
+		AddNewObjectToInventory(ActorPickUp);
 	}
-
+	
 	ActorPickUp->Destroy();
 
 	OnUpdateInventory.Broadcast(Inventory);
@@ -70,4 +70,16 @@ void UInventoryComponent::AddToInventory(APickUpActor* ActorPickUp)
 void UInventoryComponent::UpdateInventory()
 {
 	UE_LOG(LogTemp, Warning, TEXT("InventoryComponent->UpdateInventory()"));
+}
+
+void UInventoryComponent::AddNewObjectToInventory(APickUpActor* ActorPickUp)
+{
+	//UE_LOG(LogTemp, Warning, TEXT("Stack NOT found, creating it"));
+	FInventoryItemStack ItemStack;
+	ItemStack.Name = ActorPickUp->Name;
+	ItemStack.PickUpActor = ActorPickUp;
+	ItemStack.Quantity = 1;
+	ItemStack.Image = ActorPickUp->Image;
+
+	Inventory.Add(ItemStack);
 }

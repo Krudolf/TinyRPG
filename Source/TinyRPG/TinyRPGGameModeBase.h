@@ -13,5 +13,5 @@ UCLASS()
 class TINYRPG_API ATinyRPGGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+
 };

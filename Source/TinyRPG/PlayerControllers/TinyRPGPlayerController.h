@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include "Components/CanvasPanel.h"
 #include "GameFramework/PlayerController.h"
 #include "TinyRPGPlayerController.generated.h"
 
@@ -24,8 +26,8 @@ public:
 	void RemovePickUpWidget();
 
 private:
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<UUserWidget> HUDClass;
+	/*UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> HUDClass;*/
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UUserWidget> InventoryClass;
@@ -34,12 +36,15 @@ private:
 	TSubclassOf<UUserWidget> PickUpClass;
 
 	UPROPERTY()
-	UUserWidget* HUD;
-
-	UPROPERTY()
 	UUserWidget* PickUp;
 
 	UPROPERTY()
 	UUserWidget* Inventory;
-	
+
+public:
+	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UUserWidget* HUD;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UCanvasPanel* HUDCanvas;*/
 };

@@ -6,6 +6,8 @@
 #include "TinyRPG/Actors/PickUpActor.h"
 #include "TinyRPG/PlayerControllers/TinyRPGPlayerController.h"
 #include "Components/CapsuleComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "TinyRPG/TinyRPGGameModeBase.h"
 #include "TinyRPG/ActorComponents/InventoryComponent.h"
 
 #define OUT
@@ -16,6 +18,9 @@ ATinyRPGCharacter::ATinyRPGCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	InteractionCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("InteractionCapsule"));
+	InteractionCapsule->SetupAttachment(this->GetCapsuleComponent());
+	
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryComponent"));
 }
 
@@ -34,7 +39,7 @@ void ATinyRPGCharacter::BeginPlay()
 	GetCapsuleComponent()->OnComponentEndOverlap.AddDynamic(this, &ATinyRPGCharacter::OnOverlapEnd);
 }
 
-void ATinyRPGCharacter::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void ATinyRPGCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (OtherActor != nullptr && OtherActor != this && OtherComp != nullptr)
 	{

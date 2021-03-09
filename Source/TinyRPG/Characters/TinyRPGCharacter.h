@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include "Components/WidgetComponent.h"
 #include "GameFramework/Character.h"
 #include "TinyRPGCharacter.generated.h"
 
@@ -39,6 +41,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Damage = 20.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UCapsuleComponent* InteractionCapsule;
 
 public:	
 	// Called every frame

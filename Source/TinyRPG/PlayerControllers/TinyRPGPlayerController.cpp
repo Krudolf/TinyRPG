@@ -9,6 +9,12 @@
 
 void ATinyRPGPlayerController::CreateInventory()
 {
+	/*HUD = CreateWidget(this, HUDClass);
+	if(HUD != nullptr)
+	{
+		HUD->AddToViewport();
+	}*/
+	
 	Inventory = CreateWidget(this, InventoryClass);
 	if (Inventory != nullptr)
 	{

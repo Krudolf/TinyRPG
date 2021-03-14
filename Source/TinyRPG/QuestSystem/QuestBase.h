@@ -4,7 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "TinyRPG/Actors/LocationMarker.h"
+#include "TinyRPG/structs/ObjectiveData.h"
+
 #include "QuestBase.generated.h"
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FLocationReachedDelegate, const ALocationMarker*, LocationMarker);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FInteractionTargetDelegate, const AActor*, InteractionTarget);
 
 UCLASS()
 class TINYRPG_API AQuestBase : public AActor
@@ -23,10 +29,34 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(CallInEditor)
+    void OrganiseQuestInEditor();
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString QuestName = TEXT("QuestName");
 
-	UFUNCTION(CallInEditor)
-	void OrganiseQuestInEditor();
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString Description = TEXT("Description for the mission");
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FObjectiveData> Objectives;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsStoryQuest = true;
+
+	//Event dispatchers
+	UPROPERTY(BlueprintAssignable)
+	FLocationReachedDelegate OnLocationReached;
+
+	UPROPERTY(BlueprintAssignable)
+	FInteractionTargetDelegate OnInteractionTarget;
+
+	UFUNCTION()
+    void CheckLocationObjective(const ALocationMarker* LocationMarker);
+
+	UFUNCTION()
+    void CheckInteractionObjective(const AActor* InteractionTarget);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void RefreshUI();
 };

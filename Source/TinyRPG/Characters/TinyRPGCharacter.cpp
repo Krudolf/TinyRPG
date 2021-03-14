@@ -7,8 +7,8 @@
 #include "TinyRPG/PlayerControllers/TinyRPGPlayerController.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "TinyRPG/TinyRPGGameModeBase.h"
 #include "TinyRPG/ActorComponents/InventoryComponent.h"
+#include "TinyRPG/ActorComponents/QuestLogComponent.h"
 
 #define OUT
 
@@ -20,8 +20,13 @@ ATinyRPGCharacter::ATinyRPGCharacter()
 
 	InteractionCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("InteractionCapsule"));
 	InteractionCapsule->SetupAttachment(this->GetCapsuleComponent());
+	InteractionCapsule->SetRelativeRotation(FRotator(90.f, 0.f, 0.f));
+	InteractionCapsule->SetRelativeLocation(FVector(115.f, 0.f, 40.f));
+	InteractionCapsule->SetCapsuleHalfHeight(80.f);
 	
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryComponent"));
+
+	QuestLogComponent = CreateDefaultSubobject<UQuestLogComponent>(TEXT("QuestLogComponent"));
 }
 
 // Called when the game starts or when spawned

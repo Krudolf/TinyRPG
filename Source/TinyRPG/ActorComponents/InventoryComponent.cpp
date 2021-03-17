@@ -5,6 +5,9 @@
 #include "TinyRPG/Actors/PickUpActor.h"
 #include "TinyRPG/Characters/TinyRPGCharacter.h"
 #include "Containers/Array.h"
+#include "Kismet/GameplayStatics.h"
+#include "TinyRPG/QuestSystem/QuestBase.h"
+#include "TinyRPG/ActorComponents/QuestLogComponent.h"
 
 // Sets default values for this component's properties
 UInventoryComponent::UInventoryComponent()
@@ -65,6 +68,26 @@ void UInventoryComponent::AddToInventory(APickUpActor* ActorPickUp)
 	ActorPickUp->Destroy();
 
 	OnUpdateInventory.Broadcast(Inventory);
+	
+	ATinyRPGCharacter* Player = Cast<ATinyRPGCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	if(Player == nullptr)
+	{
+		return;
+	}
+
+	UActorComponent* ComponentFound = Player->GetComponentByClass(UQuestLogComponent::StaticClass());
+	UQuestLogComponent* QuestLogComponent = Cast<UQuestLogComponent>(ComponentFound);
+
+	if(QuestLogComponent == nullptr)
+	{
+		return;
+	}
+	
+	for(AQuestBase* Quest : QuestLogComponent->Quests)
+	{
+		//GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, TEXT("Inventory"));
+		Quest->OnCollectedItem.Broadcast(ActorPickUp);
+	}
 }
 
 void UInventoryComponent::UpdateInventory()

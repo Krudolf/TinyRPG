@@ -7,7 +7,7 @@
 AQuestBase::AQuestBase()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 }
 
@@ -18,6 +18,7 @@ void AQuestBase::BeginPlay()
 
 	OnLocationReached.AddDynamic(this, &AQuestBase::CheckLocationObjective);
 	OnInteractionTarget.AddDynamic(this, &AQuestBase::CheckInteractionObjective);
+	OnCollectedItem.AddDynamic(this, &AQuestBase::CheckCollectItemObjective);
 }
 
 // Called every frame
@@ -41,46 +42,53 @@ void AQuestBase::OrganiseQuestInEditor()
 void AQuestBase::CheckLocationObjective(const ALocationMarker* LocationMarker)
 {
 	//GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, TEXT("Location reached"));
-	int32 SavePosition = -1;
 	for(int32 Position = 0; Position < Objectives.Num(); Position++)
 	{
 		if(!Objectives[Position].bIsComplete && Objectives[Position].Target == LocationMarker)
 		{
-			SavePosition = Position;
-		}
-	}
+			FObjectiveData Objective = Objectives[Position];
+			Objective.bIsComplete = true;
+			Objectives[Position] = Objective;
 
-	if(SavePosition != -1)
-	{
-		FObjectiveData Objective = Objectives[SavePosition];
-		Objective.bIsComplete = true;
-		Objectives[SavePosition] = Objective;
-		
-		//GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, TEXT("NeedToUpdateUI"));
-		RefreshUI();
+			RefreshUI();
+		}
 	}
 }
 
 void AQuestBase::CheckInteractionObjective(const AActor* InteractionTarget)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, TEXT("CheckInteractionObjective"));
-	int32 SavePosition = -1;
+	//GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, TEXT("CheckInteractionObjective"));
 	for(int32 Position = 0; Position < Objectives.Num(); Position++)
 	{
 		if(!Objectives[Position].bIsComplete && Objectives[Position].Target == InteractionTarget)
 		{
-			SavePosition = Position;
+			FObjectiveData Objective = Objectives[Position];
+			Objective.bIsComplete = true;
+			Objectives[Position] = Objective;
+
+			RefreshUI();
 		}
 	}
+}
 
-	if(SavePosition != -1)
+void AQuestBase::CheckCollectItemObjective(const APickUpActor* CollectedItem)
+{
+	//GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, TEXT("CheckCollectItemObjective"));
+	for(int32 Position = 0; Position < Objectives.Num(); Position++)
 	{
-		FObjectiveData Objective = Objectives[SavePosition];
-		Objective.bIsComplete = true;
-		Objectives[SavePosition] = Objective;
-		
-		//GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, TEXT("NeedToUpdateUI"));
-		RefreshUI();
+		if(!Objectives[Position].bIsComplete && Objectives[Position].Target->GetClass() == CollectedItem->GetClass())
+		{
+			FObjectiveData Objective = Objectives[Position];
+			Objective.CurrentNumber++;
+			if(Objective.CurrentNumber >= Objective.Number)
+			{
+				Objective.bIsComplete = true;
+			}
+			Objectives[Position] = Objective;
+
+			RefreshUI();
+			//UE_LOG(LogTemp, Warning, TEXT("%i"), Objective.CurrentNumber);
+		}
 	}
 }
 

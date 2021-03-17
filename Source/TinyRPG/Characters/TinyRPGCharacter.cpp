@@ -79,7 +79,7 @@ void ATinyRPGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &APawn::AddControllerYawInput);
 
 	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed, this, &ACharacter::Jump);
-	PlayerInputComponent->BindAction(TEXT("Interact"), IE_Pressed, this, &ATinyRPGCharacter::Interact);
+	PlayerInputComponent->BindAction(TEXT("Interact"), IE_Pressed, this, &ATinyRPGCharacter::Interaction);
 	PlayerInputComponent->BindAction(TEXT("Hit"), IE_Pressed, this, &ATinyRPGCharacter::Hit);
 	PlayerInputComponent->BindAction(TEXT("Inventory"), IE_Pressed, this, &ATinyRPGCharacter::ToggleInventory);
 	//PlayerInputComponent->BindAction(TEXT("SelectItem"), IE_Pressed, this, &ATinyRPGCharacter::UseItem);
@@ -112,7 +112,7 @@ bool ATinyRPGCharacter::GetHittedActor(FHitResult& OutHit, FVector& OutHitDirect
 	return GetWorld()->LineTraceSingleByChannel(OUT OutHit, Location, End, ECollisionChannel::ECC_Visibility, CollisionParams);
 }
 
-void ATinyRPGCharacter::Interact()
+void ATinyRPGCharacter::Interaction()
 {
 	if (OverlapingPickUpActor == nullptr)
 	{

@@ -57,6 +57,9 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UFUNCTION(BlueprintCallable)
+    void Interaction();
+
 	UPROPERTY(BlueprintReadOnly)
 	APickUpActor* OverlapingPickUpActor;
 
@@ -64,7 +67,6 @@ private:
 	void MoveForward(float AxisValue);
 	void MoveRight(float AxisValue);
 	bool GetHittedActor(FHitResult& OutHit, FVector& OutHitDirection, float Distance);
-	void Interact();
 	void Hit();
 	void ToggleInventory();
 

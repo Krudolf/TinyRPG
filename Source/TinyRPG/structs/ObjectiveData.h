@@ -31,4 +31,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 Number;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 CurrentNumber;
 };

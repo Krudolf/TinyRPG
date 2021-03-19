@@ -48,6 +48,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsStoryQuest = true;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsCompleted = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float RewardXP = 100.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    FString TurnInDescription = TEXT("Have done that for me yet?");
+
 	//Event dispatchers
 	UPROPERTY(BlueprintAssignable)
 	FLocationReachedDelegate OnLocationReached;

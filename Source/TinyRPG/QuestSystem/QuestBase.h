@@ -57,6 +57,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
     FString TurnInDescription = TEXT("Have done that for me yet?");
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	AQuestBase* PreRequisiteQuest = nullptr;
+
 	//Event dispatchers
 	UPROPERTY(BlueprintAssignable)
 	FLocationReachedDelegate OnLocationReached;

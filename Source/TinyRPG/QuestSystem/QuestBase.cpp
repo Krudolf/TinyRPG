@@ -19,6 +19,7 @@ void AQuestBase::BeginPlay()
 	OnLocationReached.AddDynamic(this, &AQuestBase::CheckLocationObjective);
 	OnInteractionTarget.AddDynamic(this, &AQuestBase::CheckInteractionObjective);
 	OnCollectedItem.AddDynamic(this, &AQuestBase::CheckCollectItemObjective);
+	OnEnemyKilled.AddDynamic(this, &AQuestBase::CheckEnemyKilledObjective);
 }
 
 // Called every frame
@@ -87,7 +88,29 @@ void AQuestBase::CheckCollectItemObjective(const APickUpActor* CollectedItem)
 			Objectives[Position] = Objective;
 
 			RefreshUI();
-			//UE_LOG(LogTemp, Warning, TEXT("%i"), Objective.CurrentNumber);
+			//UE_LOG(LogTemp, Warning, TEXT("Collected item: %i"), Objective.CurrentNumber);
+		}
+	}
+}
+
+void AQuestBase::CheckEnemyKilledObjective(const AEnemy* KilledEnemy)
+{
+	//GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, TEXT("CheckKilledEnemyObjective"));
+	for(int32 Position = 0; Position < Objectives.Num(); Position++)
+	{
+		if(!Objectives[Position].bIsComplete && Objectives[Position].Target->GetClass() == KilledEnemy->GetClass())
+		{
+			FObjectiveData Objective = Objectives[Position];
+			//TODO: CurrentNumber must be a variable from QuestBase, not from ObjectiveStruct 
+			Objective.CurrentNumber++;
+			if(Objective.CurrentNumber >= Objective.Number)
+			{
+				Objective.bIsComplete = true;
+			}
+			Objectives[Position] = Objective;
+
+			RefreshUI();
+			//UE_LOG(LogTemp, Warning, TEXT("Enemy killed: %i"), Objective.CurrentNumber);
 		}
 	}
 }

@@ -7,12 +7,14 @@
 #include "TinyRPG/Actors/LocationMarker.h"
 #include "TinyRPG/Actors/PickUpActor.h"
 #include "TinyRPG/structs/ObjectiveData.h"
+#include "TinyRPG/Characters/Enemy.h"
 
 #include "QuestBase.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FLocationReachedDelegate, const ALocationMarker*, LocationMarker);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FInteractionTargetDelegate, const AActor*, InteractionTarget);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCollectedItemDelegate, const APickUpActor*, CollectedItem);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FKillEnemyDelegate, const AEnemy*, KilledEnemy);
 
 UCLASS()
 class TINYRPG_API AQuestBase : public AActor
@@ -56,6 +58,9 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FCollectedItemDelegate OnCollectedItem;
 
+	UPROPERTY(BlueprintAssignable)
+	FKillEnemyDelegate OnEnemyKilled;
+
 	UFUNCTION()
     void CheckLocationObjective(const ALocationMarker* LocationMarker);
 
@@ -64,6 +69,9 @@ public:
 
 	UFUNCTION()
 	void CheckCollectItemObjective(const APickUpActor* CollectedItem);
+
+	UFUNCTION()
+	void CheckEnemyKilledObjective(const AEnemy* KilledEnemy);
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void RefreshUI();

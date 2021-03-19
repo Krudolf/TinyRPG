@@ -109,7 +109,7 @@ bool ATinyRPGCharacter::GetHittedActor(FHitResult& OutHit, FVector& OutHitDirect
 	FCollisionQueryParams CollisionParams;
 	CollisionParams.AddIgnoredActor(this);
 	
-	return GetWorld()->LineTraceSingleByChannel(OUT OutHit, Location, End, ECollisionChannel::ECC_Visibility, CollisionParams);
+	return GetWorld()->LineTraceSingleByChannel(OUT OutHit, Location, End, ECollisionChannel::ECC_PhysicsBody, CollisionParams);
 }
 
 void ATinyRPGCharacter::Interaction()
@@ -135,7 +135,7 @@ void ATinyRPGCharacter::Hit()
 	if (bSuccess)
 	{
 		DrawDebugPoint(GetWorld(), Hit.Location, 20, FColor::Red, false, 2);
-		UE_LOG(LogTemp, Warning, TEXT("Hitted actor %s"), *Hit.Actor->GetName());
+		//UE_LOG(LogTemp, Warning, TEXT("Hitted actor %s"), *Hit.Actor->GetName());
 
 		AActor* ActorHitted = Hit.GetActor();
 		if (ActorHitted != nullptr)
@@ -143,8 +143,6 @@ void ATinyRPGCharacter::Hit()
 			FPointDamageEvent PointDamageEvent(Damage, Hit, HitDirection, nullptr);
 			ActorHitted->TakeDamage(Damage, PointDamageEvent, GetController(), this);
 		}
-
-		//TODO: Call takeDamage to damage the actor
 	}
 }
 

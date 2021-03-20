@@ -9,6 +9,11 @@ AQuestBase::AQuestBase()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
+	SceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("SceneRoot"));
+	RootComponent = SceneComponent;
+
+	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+	StaticMesh->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -20,6 +25,11 @@ void AQuestBase::BeginPlay()
 	OnInteractionTarget.AddDynamic(this, &AQuestBase::CheckInteractionObjective);
 	OnCollectedItem.AddDynamic(this, &AQuestBase::CheckCollectItemObjective);
 	OnEnemyKilled.AddDynamic(this, &AQuestBase::CheckEnemyKilledObjective);
+
+	if(PreRequisiteQuest != nullptr && !PreRequisiteQuest->bIsCompleted)
+	{
+		StaticMesh->SetVisibility(false);
+	}
 }
 
 // Called every frame
@@ -113,5 +123,10 @@ void AQuestBase::CheckEnemyKilledObjective(const AEnemy* KilledEnemy)
 			//UE_LOG(LogTemp, Warning, TEXT("Enemy killed: %i"), Objective.CurrentNumber);
 		}
 	}
+}
+
+void AQuestBase::SetQuestVisibility(const bool bIsVisible) const
+{
+	StaticMesh->SetVisibility(bIsVisible);
 }
 

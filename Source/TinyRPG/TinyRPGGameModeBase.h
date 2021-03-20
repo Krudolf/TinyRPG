@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "QuestSystem/QuestBase.h"
+
 #include "TinyRPGGameModeBase.generated.h"
 
 /**
@@ -14,4 +16,10 @@ class TINYRPG_API ATinyRPGGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<AQuestBase*> QuestsInWorld;
+
+	UFUNCTION(BlueprintCallable)
+	void RefreshQuestsVisibility();
 };

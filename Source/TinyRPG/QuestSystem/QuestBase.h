@@ -36,6 +36,12 @@ public:
 	UFUNCTION(CallInEditor)
     void OrganiseQuestInEditor();
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	USceneComponent* SceneComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UStaticMeshComponent* StaticMesh;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString QuestName = TEXT("QuestName");
 
@@ -87,4 +93,7 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void RefreshUI();
+
+	UFUNCTION(BlueprintCallable)
+	void SetQuestVisibility(const bool bIsVisible) const;
 };

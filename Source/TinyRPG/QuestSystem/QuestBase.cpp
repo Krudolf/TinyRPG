@@ -130,3 +130,8 @@ void AQuestBase::SetQuestVisibility(const bool bIsVisible) const
 	StaticMesh->SetVisibility(bIsVisible);
 }
 
+bool AQuestBase::IsQuestAcceptable() const
+{
+	return !this->bIsCompleted && (PreRequisiteQuest == nullptr || (PreRequisiteQuest != nullptr && PreRequisiteQuest->bIsCompleted));
+}
+

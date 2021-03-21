@@ -96,4 +96,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetQuestVisibility(const bool bIsVisible) const;
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	bool IsQuestAcceptable() const;
 };

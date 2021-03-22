@@ -9,6 +9,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "TinyRPG/ActorComponents/InventoryComponent.h"
 #include "TinyRPG/ActorComponents/QuestLogComponent.h"
+#include "TinyRPG/ActorComponents/LevelComponent.h"
 
 #define OUT
 
@@ -27,6 +28,8 @@ ATinyRPGCharacter::ATinyRPGCharacter()
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryComponent"));
 
 	QuestLogComponent = CreateDefaultSubobject<UQuestLogComponent>(TEXT("QuestLogComponent"));
+
+	LevelComponent = CreateDefaultSubobject<ULevelComponent>(TEXT("LevelComponent"));
 }
 
 // Called when the game starts or when spawned

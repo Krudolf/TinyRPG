@@ -7,11 +7,13 @@
 #include "Components/WidgetComponent.h"
 #include "GameFramework/Character.h"
 
+
 #include "TinyRPGCharacter.generated.h"
 
 class UQuestLogComponent;
 class APickUpActor;
 class UInventoryComponent;
+class ULevelComponent;
 
 UCLASS()
 class TINYRPG_API ATinyRPGCharacter : public ACharacter
@@ -37,6 +39,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UQuestLogComponent* QuestLogComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	ULevelComponent* LevelComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float InteractionDistance = 600.f;

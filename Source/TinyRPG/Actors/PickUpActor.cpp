@@ -21,13 +21,14 @@ APickUpActor::APickUpActor()
 
 	BoxCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxCollider"));
 	BoxCollider->SetWorldScale3D(FVector(1.5f, 1.5f, 1.5f));
-	BoxCollider->AttachToComponent(SceneComponent, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 }
 
 // Called when the game starts or when spawned
 void APickUpActor::BeginPlay()
 {
 	Super::BeginPlay();
+
+	BoxCollider->AttachToComponent(SceneComponent, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 }
 
 // Called every frame

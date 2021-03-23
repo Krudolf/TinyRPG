@@ -42,6 +42,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float BufferXP = 0;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UParticleSystem* EmitterLevelUp;
+
     void CalculatePercentage();
 
 	void CalculateMaxXP();

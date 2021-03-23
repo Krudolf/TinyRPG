@@ -3,13 +3,14 @@
 
 #include "LevelComponent.h"
 
+#include "Kismet/GameplayStatics.h"
+
 // Sets default values for this component's properties
 ULevelComponent::ULevelComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
 }
 
 
@@ -17,6 +18,11 @@ ULevelComponent::ULevelComponent()
 void ULevelComponent::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if(EmitterLevelUp == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("EmitterLevelUp not set for %s in %s"), *GetName(), *GetOwner()->GetName());
+	}
 
 	CalculatePercentage();
 }
@@ -66,6 +72,8 @@ void ULevelComponent::LevelUp()
 		CurrentXP = 0;
 		BufferXP = 0;
 		AddXP(RemainingXP);
+		const FVector SpawnLocation = FVector::UpVector * -20 + GetOwner()->GetActorLocation();
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), EmitterLevelUp, SpawnLocation, FRotator::ZeroRotator, true, EPSCPoolMethod::None, true);
 	}
 }
 

@@ -3,10 +3,12 @@
 
 #include "TinyRPGCharacter.h"
 #include "DrawDebugHelpers.h"
+#include "Blueprint/WidgetBlueprintLibrary.h"
 #include "TinyRPG/Actors/PickUpActor.h"
 #include "TinyRPG/PlayerControllers/TinyRPGPlayerController.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "TinyRPG/TinyRPGGameModeBase.h"
 #include "TinyRPG/ActorComponents/InventoryComponent.h"
 #include "TinyRPG/ActorComponents/QuestLogComponent.h"
 #include "TinyRPG/ActorComponents/LevelComponent.h"
@@ -37,14 +39,14 @@ void ATinyRPGCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ATinyRPGPlayerController* PlayerController = Cast<ATinyRPGPlayerController>(GetController());
-	if (PlayerController != nullptr)
-	{
-		PlayerController->CreateInventory();
-	}
-
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ATinyRPGCharacter::OnOverlapBegin);
 	GetCapsuleComponent()->OnComponentEndOverlap.AddDynamic(this, &ATinyRPGCharacter::OnOverlapEnd);
+	
+	if(ATinyRPGPlayerController* PlayerController = Cast<ATinyRPGPlayerController>(GetController()))
+	{
+		PlayerController->CreateInventory();
+		PlayerController->SetInputMode(FInputModeGameOnly());
+	}
 }
 
 void ATinyRPGCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)

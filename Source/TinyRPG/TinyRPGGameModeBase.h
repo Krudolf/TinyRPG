@@ -22,10 +22,4 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void RefreshQuestsVisibility();
-
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void CreatePlayerHUD();
-
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-    void FillQuestArray();
 };

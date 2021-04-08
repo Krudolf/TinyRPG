@@ -2,9 +2,8 @@
 
 
 #include "PickUpActor.h"
-#include "Components/BoxComponent.h"
+#include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "TinyRPG/Characters/TinyRPGCharacter.h"
 
 // Sets default values
 APickUpActor::APickUpActor()
@@ -15,12 +14,12 @@ APickUpActor::APickUpActor()
 	SceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 	RootComponent = SceneComponent;
 
+	Collider = CreateDefaultSubobject<USphereComponent>(TEXT("Collider"));
+	Collider->SetupAttachment(RootComponent);
+	
 	ItemMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BaseMesh"));
-	ItemMesh->SetupAttachment(RootComponent);
+	ItemMesh->SetupAttachment(Collider);
 	ItemMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-
-	BoxCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxCollider"));
-	BoxCollider->SetWorldScale3D(FVector(1.5f, 1.5f, 1.5f));
 }
 
 // Called when the game starts or when spawned
@@ -28,7 +27,7 @@ void APickUpActor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	BoxCollider->AttachToComponent(SceneComponent, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+	Collider->AttachToComponent(SceneComponent, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 }
 
 // Called every frame

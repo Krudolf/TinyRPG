@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "PickUpActor.generated.h"
 
-class UBoxComponent;
+class USphereComponent;
 
 UCLASS()
 class TINYRPG_API APickUpActor : public AActor
@@ -24,8 +24,6 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	void Show(bool bVisible);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString Name;
@@ -50,6 +48,6 @@ protected:
 	UStaticMeshComponent* ItemMesh;
 
 	UPROPERTY(VisibleAnywhere)
-	UBoxComponent* BoxCollider;
+	USphereComponent* Collider;
 
 };

@@ -66,6 +66,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	AQuestBase* PreRequisiteQuest = nullptr;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	AActor* TurnInTargetActor = nullptr;
+
 	//Event dispatchers
 	UPROPERTY(BlueprintAssignable)
 	FLocationReachedDelegate OnLocationReached;

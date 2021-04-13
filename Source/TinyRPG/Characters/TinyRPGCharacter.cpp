@@ -54,15 +54,11 @@ void ATinyRPGCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AAct
 	if (OtherActor != nullptr && OtherActor != this && OtherComp != nullptr)
 	{
 		OverlapingPickUpActor = Cast<APickUpActor>(OtherActor);
-		ATinyRPGPlayerController* PlayerController = Cast<ATinyRPGPlayerController>(GetController());
-		PlayerController->CreatePickUpWidget();
 	}
 }
 
 void ATinyRPGCharacter::OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	ATinyRPGPlayerController* PlayerController = Cast<ATinyRPGPlayerController>(GetController());
-	PlayerController->RemovePickUpWidget();
 	OverlapingPickUpActor = nullptr;
 }
 

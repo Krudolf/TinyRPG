@@ -50,4 +50,7 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	USphereComponent* Collider;
 
+	UPROPERTY(VisibleAnywhere)
+	UParticleSystemComponent* ParticleSystemComponent;
+
 };

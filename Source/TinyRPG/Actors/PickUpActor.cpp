@@ -4,6 +4,7 @@
 #include "PickUpActor.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Particles/ParticleSystemComponent.h"
 
 // Sets default values
 APickUpActor::APickUpActor()
@@ -20,6 +21,10 @@ APickUpActor::APickUpActor()
 	ItemMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BaseMesh"));
 	ItemMesh->SetupAttachment(Collider);
 	ItemMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	ParticleSystemComponent = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ParticleSystem"));
+	ParticleSystemComponent->SetupAttachment(Collider);
+	ParticleSystemComponent->SetRelativeLocation(FVector::ZeroVector);
 }
 
 // Called when the game starts or when spawned

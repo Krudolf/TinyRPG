@@ -21,30 +21,11 @@ public:
 
 	void ToggleInventoryVisibility();
 
-	void CreatePickUpWidget();
-
-	void RemovePickUpWidget();
-
 private:
-	/*UPROPERTY(EditAnywhere)
-	TSubclassOf<UUserWidget> HUDClass;*/
-
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UUserWidget> InventoryClass;
-
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<UUserWidget> PickUpClass;
-
-	UPROPERTY()
-	UUserWidget* PickUp;
 
 	UPROPERTY()
 	UUserWidget* Inventory;
 
-public:
-	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	UUserWidget* HUD;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	UCanvasPanel* HUDCanvas;*/
 };

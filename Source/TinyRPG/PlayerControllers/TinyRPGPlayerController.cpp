@@ -9,12 +9,6 @@
 
 void ATinyRPGPlayerController::CreateInventory()
 {
-	/*HUD = CreateWidget(this, HUDClass);
-	if(HUD != nullptr)
-	{
-		HUD->AddToViewport();
-	}*/
-	
 	Inventory = CreateWidget(this, InventoryClass);
 	if (Inventory != nullptr)
 	{
@@ -29,11 +23,11 @@ void ATinyRPGPlayerController::ToggleInventoryVisibility()
 	{
 		return;
 	}
-	ESlateVisibility Visibility = Inventory->IsVisible() ? ESlateVisibility::Hidden : ESlateVisibility::Visible;
+	const ESlateVisibility Visibility = Inventory->IsVisible() ? ESlateVisibility::Hidden : ESlateVisibility::Visible;
 
 	Inventory->SetVisibility(Visibility);
 
-	bool bInventoryVisible = Inventory->IsVisible();
+	const bool bInventoryVisible = Inventory->IsVisible();
 
 	bShowMouseCursor = bInventoryVisible;
 	bEnableClickEvents = bInventoryVisible;
@@ -44,25 +38,5 @@ void ATinyRPGPlayerController::ToggleInventoryVisibility()
 	if (!bInventoryVisible) 
 	{
 		UWidgetBlueprintLibrary::SetInputMode_GameOnly(this);
-	}
-}
-
-void ATinyRPGPlayerController::CreatePickUpWidget()
-{
-	RemovePickUpWidget();
-
-	PickUp = CreateWidget(this, PickUpClass);
-	if (PickUp != nullptr)
-	{
-		PickUp->AddToViewport();
-	}
-}
-
-void ATinyRPGPlayerController::RemovePickUpWidget()
-{
-	if (PickUp != nullptr)
-	{
-		PickUp->RemoveFromViewport();
-		PickUp = nullptr;
 	}
 }

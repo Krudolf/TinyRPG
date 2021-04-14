@@ -64,6 +64,9 @@ public:
     FString TurnInDescription = TEXT("Have done that for me yet?");
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString TurnInTargetInteractionDescription = TEXT("");
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	AQuestBase* PreRequisiteQuest = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Quest Base | Materials")

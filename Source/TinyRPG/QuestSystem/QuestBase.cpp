@@ -135,3 +135,9 @@ bool AQuestBase::IsQuestAcceptable() const
 	return !this->bIsCompleted && (PreRequisiteQuest == nullptr || (PreRequisiteQuest != nullptr && PreRequisiteQuest->bIsCompleted));
 }
 
+void AQuestBase::ChangeMaterial() const
+{
+	StaticMesh->SetMaterial(0, AcceptedMaterial);
+	StaticMesh->SetMaterial(1, AcceptedMaterial);
+}
+

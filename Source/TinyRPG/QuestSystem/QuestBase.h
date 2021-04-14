@@ -66,6 +66,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	AQuestBase* PreRequisiteQuest = nullptr;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Quest Base | Materials")
+	UMaterial* CanAcceptMaterial;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Quest Base | Materials")
+	UMaterial* AcceptedMaterial;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	AActor* TurnInTargetActor = nullptr;
 
@@ -102,4 +108,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	bool IsQuestAcceptable() const;
+
+	void ChangeMaterial() const;
 };

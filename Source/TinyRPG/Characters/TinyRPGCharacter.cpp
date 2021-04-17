@@ -136,7 +136,7 @@ void ATinyRPGCharacter::Hit()
 	if (bSuccess)
 	{
 		DrawDebugPoint(GetWorld(), Hit.Location, 20, FColor::Red, false, 2);
-		//UE_LOG(LogTemp, Warning, TEXT("Hitted actor %s"), *Hit.Actor->GetName());
+		UE_LOG(LogTemp, Warning, TEXT("Hitted actor %s"), *Hit.Actor->GetName());
 
 		AActor* ActorHitted = Hit.GetActor();
 		if (ActorHitted != nullptr)

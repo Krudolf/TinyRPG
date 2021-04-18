@@ -24,6 +24,12 @@ protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bIsDead = false;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool bIsResting = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsAgressive = false;
+
 	FTimerHandle AutodestructionHandle;
 	
 public:

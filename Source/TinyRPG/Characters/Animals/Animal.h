@@ -8,6 +8,8 @@
 #include "GameFramework/Character.h"
 #include "Animal.generated.h"
 
+class UHealthComponent;
+
 UCLASS()
 class TINYRPG_API AAnimal : public ACharacter
 {
@@ -21,8 +23,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	bool bIsDead = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UHealthComponent* HealthComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bIsResting = false;

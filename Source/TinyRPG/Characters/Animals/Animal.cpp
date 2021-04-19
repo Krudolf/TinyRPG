@@ -3,12 +3,16 @@
 
 #include "Animal.h"
 
+#include "TinyRPG/ActorComponents/HealthComponent.h"
+
 
 // Sets default values
 AAnimal::AAnimal()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
+
+	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
 
 }
 
@@ -31,14 +35,9 @@ float AAnimal::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, A
 {
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	if(bIsDead)
-	{
-		return 0.f;
-	}
+	HealthComponent->ApplyDamage(DamageAmount);
 	
-	bIsDead = true;
-
-	if(bIsDead)
+	if(HealthComponent->IsDead())
 	{
 		PlayAnimDeath();
 		GetWorld()->GetTimerManager().SetTimer(AutodestructionHandle, this, &AAnimal::CallDestroy, 5.f, false);

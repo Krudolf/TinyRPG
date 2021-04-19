@@ -14,6 +14,7 @@ class UQuestLogComponent;
 class APickUpActor;
 class UInventoryComponent;
 class ULevelComponent;
+class UHealthComponent;
 
 UCLASS()
 class TINYRPG_API ATinyRPGCharacter : public ACharacter
@@ -34,6 +35,8 @@ protected:
 	UFUNCTION()
 	void OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UInventoryComponent* InventoryComponent;
 
@@ -50,10 +53,13 @@ protected:
 	float HitDistance = 400.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float Damage = 20.f;
+	float Damage = 25.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UCapsuleComponent* InteractionCapsule;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UHealthComponent* HealthComponent;
 
 public:	
 	// Called every frame

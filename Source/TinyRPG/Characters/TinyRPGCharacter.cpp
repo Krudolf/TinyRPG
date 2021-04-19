@@ -9,6 +9,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "TinyRPG/TinyRPGGameModeBase.h"
+#include "TinyRPG/ActorComponents/HealthComponent.h"
 #include "TinyRPG/ActorComponents/InventoryComponent.h"
 #include "TinyRPG/ActorComponents/QuestLogComponent.h"
 #include "TinyRPG/ActorComponents/LevelComponent.h"
@@ -19,7 +20,7 @@
 ATinyRPGCharacter::ATinyRPGCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	InteractionCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("InteractionCapsule"));
 	InteractionCapsule->SetupAttachment(this->GetCapsuleComponent());
@@ -32,6 +33,8 @@ ATinyRPGCharacter::ATinyRPGCharacter()
 	QuestLogComponent = CreateDefaultSubobject<UQuestLogComponent>(TEXT("QuestLogComponent"));
 
 	LevelComponent = CreateDefaultSubobject<ULevelComponent>(TEXT("LevelComponent"));
+
+	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -60,6 +63,19 @@ void ATinyRPGCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AAct
 void ATinyRPGCharacter::OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	OverlapingPickUpActor = nullptr;
+}
+
+float ATinyRPGCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
+	AActor* DamageCauser)
+{
+	HealthComponent->ApplyDamage(DamageAmount);
+
+	if(HealthComponent->IsDead())
+	{
+		DisableInput(UGameplayStatics::GetPlayerController(this, 0));
+	}
+
+	return DamageAmount;
 }
 
 // Called every frame

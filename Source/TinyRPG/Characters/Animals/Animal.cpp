@@ -48,6 +48,11 @@ float AAnimal::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, A
 	return DamageAmount;
 }
 
+void AAnimal::Attack()
+{
+	PlayAttackAnimation();
+}
+
 void AAnimal::CallDestroy()
 {
 	Destroy();

@@ -29,6 +29,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsAgressive = false;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Damage = 20.f;
 
 	FTimerHandle AutodestructionHandle;
 	
@@ -40,6 +43,12 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void PlayAnimDeath();
+	
+	UFUNCTION(BlueprintCallable)
+	void Attack();
+	
+	UFUNCTION(BlueprintImplementableEvent)
+	void PlayAttackAnimation();
 
 private:
 	UFUNCTION()

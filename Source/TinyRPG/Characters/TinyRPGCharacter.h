@@ -36,6 +36,9 @@ protected:
 	void OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+	
+	UFUNCTION(BlueprintImplementableEvent)
+	void PlayDeathAnimation();
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UInventoryComponent* InventoryComponent;

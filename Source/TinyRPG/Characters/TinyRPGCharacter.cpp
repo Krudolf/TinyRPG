@@ -68,10 +68,16 @@ void ATinyRPGCharacter::OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, 
 float ATinyRPGCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
 	AActor* DamageCauser)
 {
+	if(HealthComponent->IsDead())
+	{
+		return 0.f;
+	}
+	
 	HealthComponent->ApplyDamage(DamageAmount);
 
 	if(HealthComponent->IsDead())
 	{
+		PlayDeathAnimation();
 		DisableInput(UGameplayStatics::GetPlayerController(this, 0));
 	}
 

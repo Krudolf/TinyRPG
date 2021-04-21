@@ -44,8 +44,8 @@ float ACuttableTree::TakeDamage(float DamageAmount, struct FDamageEvent const& D
 	if (Health == 0)
 	{
 		
-		FVector SpawnLocation = GetActorLocation() + FVector(0, 0, 100);
-		FRotator SpawnRotation(FMath::RandRange(0.f, 360.f), 0, FMath::RandRange(0.f, 360.f));
+		const FVector SpawnLocation = GetActorLocation() + FVector(0, 0, 100);
+		const FRotator SpawnRotation(FMath::RandRange(0.f, 360.f), 0, FMath::RandRange(0.f, 360.f));
 		APickUpActor* TreeLog = GetWorld()->SpawnActor<APickUpActor>(TreeLogClass, SpawnLocation, SpawnRotation);
 		
 		Destroy();

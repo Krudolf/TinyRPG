@@ -118,14 +118,14 @@ void ATinyRPGCharacter::MoveRight(float AxisValue)
 	AddMovementInput(GetActorRightVector() * AxisValue);
 }
 
-bool ATinyRPGCharacter::GetHittedActor(FHitResult& OutHit, FVector& OutHitDirection, float Distance)
+bool ATinyRPGCharacter::GetHittedActor(FHitResult& OutHit, FVector& OutHitDirection, float Distance) const
 {
 	AController* CharacterController = GetController();
 	FVector Location;
 	FRotator Rotation;
 	CharacterController->GetPlayerViewPoint(OUT Location, OUT Rotation);
 
-	FVector End = Location + Rotation.Vector() * Distance;
+	const FVector End = Location + Rotation.Vector() * Distance;
 	//DrawDebugLine(GetWorld(), Location, End, FColor::Red, false, 2);
 
 	OutHitDirection = -Rotation.Vector();
@@ -137,12 +137,7 @@ bool ATinyRPGCharacter::GetHittedActor(FHitResult& OutHit, FVector& OutHitDirect
 
 void ATinyRPGCharacter::Interaction()
 {
-	if (OverlapingPickUpActor == nullptr)
-	{
-		return;
-	}
-
-	if (InventoryComponent == nullptr)
+	if (OverlapingPickUpActor == nullptr || InventoryComponent == nullptr)
 	{
 		return;
 	}
@@ -169,7 +164,7 @@ void ATinyRPGCharacter::Hit()
 	}
 }
 
-void ATinyRPGCharacter::ToggleInventory()
+void ATinyRPGCharacter::ToggleInventory() 
 {
 	ATinyRPGPlayerController* PlayerController = Cast<ATinyRPGPlayerController>(GetController());
 	if (PlayerController != nullptr)

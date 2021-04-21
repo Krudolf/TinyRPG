@@ -80,7 +80,7 @@ public:
 private:
 	void MoveForward(float AxisValue);
 	void MoveRight(float AxisValue);
-	bool GetHittedActor(FHitResult& OutHit, FVector& OutHitDirection, float Distance);
+	bool GetHittedActor(FHitResult& OutHit, FVector& OutHitDirection, float Distance) const;
 	void Hit();
 	void ToggleInventory();
 

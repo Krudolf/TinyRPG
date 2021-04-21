@@ -42,11 +42,11 @@ void UInventoryComponent::AddToInventory(APickUpActor* ActorPickUp)
 		return;
 	}
 
-	if(ActorPickUp->bIsStackable)
+	if(ActorPickUp->IsStackable())
 	{
 		FInventoryItemStack& ItemStackFound = *(Inventory.FindByPredicate([&](FInventoryItemStack const ItemStack)
 		    {
-		        return ItemStack.Name == ActorPickUp->Name && ItemStack.Quantity < ActorPickUp->MaxStack;
+		        return ItemStack.Name == ActorPickUp->GetPickUpName() && ItemStack.Quantity < ActorPickUp->GetMaxStack();
 		    }
 		));
 	
@@ -65,29 +65,9 @@ void UInventoryComponent::AddToInventory(APickUpActor* ActorPickUp)
 		AddNewObjectToInventory(ActorPickUp);
 	}
 	
-	ActorPickUp->Destroy();
+	ActorPickUp->Collected();
 
 	OnUpdateInventory.Broadcast(Inventory);
-	
-	ATinyRPGCharacter* Player = Cast<ATinyRPGCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	if(Player == nullptr)
-	{
-		return;
-	}
-
-	UActorComponent* ComponentFound = Player->GetComponentByClass(UQuestLogComponent::StaticClass());
-	UQuestLogComponent* QuestLogComponent = Cast<UQuestLogComponent>(ComponentFound);
-
-	if(QuestLogComponent == nullptr)
-	{
-		return;
-	}
-	
-	for(AQuestBase* Quest : QuestLogComponent->Quests)
-	{
-		//GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, TEXT("Inventory"));
-		Quest->OnCollectedItem.Broadcast(ActorPickUp);
-	}
 }
 
 void UInventoryComponent::UpdateInventory()
@@ -99,10 +79,10 @@ void UInventoryComponent::AddNewObjectToInventory(APickUpActor* ActorPickUp)
 {
 	//UE_LOG(LogTemp, Warning, TEXT("Stack NOT found, creating it"));
 	FInventoryItemStack ItemStack;
-	ItemStack.Name = ActorPickUp->Name;
+	ItemStack.Name = ActorPickUp->GetPickUpName();
 	ItemStack.PickUpActor = ActorPickUp;
 	ItemStack.Quantity = 1;
-	ItemStack.Image = ActorPickUp->Image;
+	ItemStack.Image = ActorPickUp->GetImage();
 
 	Inventory.Add(ItemStack);
 }

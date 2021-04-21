@@ -42,3 +42,8 @@ void UHealthComponent::ApplyHealing(const float Heal)
 	Health = FMath::Min(Health + Heal, MaxHealth);
 }
 
+float UHealthComponent::GetHealthNormalized() const
+{
+	return Health / MaxHealth;
+}
+

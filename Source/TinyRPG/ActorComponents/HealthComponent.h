@@ -37,6 +37,9 @@ public:
 
 	void ApplyHealing(const float Heal);
 
+	UFUNCTION(BlueprintPure)
+	float GetHealthNormalized() const;
+
 	FORCEINLINE bool IsDead() const {return bIsDead;};
 	FORCEINLINE float GetHealth() const {return Health;};
 	FORCEINLINE float GetMaxHealth() const {return MaxHealth;};

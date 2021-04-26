@@ -3,7 +3,9 @@
 
 #include "Animal.h"
 
+#include "Components/CapsuleComponent.h"
 #include "TinyRPG/ActorComponents/HealthComponent.h"
+#include "TinyRPG/Actors/ActorSpawner.h"
 
 
 // Sets default values
@@ -40,8 +42,10 @@ float AAnimal::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, A
 	if(HealthComponent->IsDead())
 	{
 		PlayAnimDeath();
-		GetWorld()->GetTimerManager().SetTimer(AutodestructionHandle, this, &AAnimal::CallDestroy, 5.f, false);
 		GetController()->UnPossess();
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		GetWorld()->GetTimerManager().SetTimer(AutodestructionHandle, this, &AAnimal::CallDestroy, 5.f, false);
 	}
 	
 	return DamageAmount;

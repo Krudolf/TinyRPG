@@ -5,6 +5,7 @@
 
 #include "Components/CapsuleComponent.h"
 #include "TinyRPG/ActorComponents/HealthComponent.h"
+#include "TinyRPG/ActorComponents/LevelComponent.h"
 #include "TinyRPG/Actors/ActorSpawner.h"
 
 
@@ -41,6 +42,16 @@ float AAnimal::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, A
 	
 	if(HealthComponent->IsDead())
 	{
+		if(bShouldRespawn)
+		{
+			ManageRespawn();
+		}
+
+		if(ULevelComponent* LevelComponent = Cast<ULevelComponent>(DamageCauser->GetComponentByClass(ULevelComponent::StaticClass())))
+		{
+			LevelComponent->AddXP(KillXP);
+		}
+		
 		PlayAnimDeath();
 		GetController()->UnPossess();
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
@@ -59,5 +70,13 @@ void AAnimal::Attack()
 void AAnimal::CallDestroy()
 {
 	Destroy();
+}
+
+void AAnimal::ManageRespawn() const
+{
+	if(AActorSpawner* Spawner = Cast<AActorSpawner>(GetOwner()))
+	{
+		Spawner->OnSpawnNewActor.Broadcast();
+	}
 }
 

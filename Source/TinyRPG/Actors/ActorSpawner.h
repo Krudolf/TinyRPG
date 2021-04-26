@@ -44,19 +44,22 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TSubclassOf<AAnimal> ActorToSpawnClass;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	int32 CurrentAliveActors = 0;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 MaxSpawnQuantity = 2;
 
 	UPROPERTY()
-	FTimerHandle CheckSpawnedAnimalsHandle;
+	FTimerHandle CheckSpawnAllActorsHandle;
 	
 private:
 	UFUNCTION(BlueprintCallable)
-	AAnimal* SpawnActor();
+	void SpawnActor();
+
+	UFUNCTION(BlueprintCallable)
+	void SpawnAllActors();
 
 	UFUNCTION()
 	void ManageSpawnNewActor();
-
-	UPROPERTY()
-	TArray<AAnimal*> SpawnedAnimals;
 };

@@ -33,7 +33,13 @@ protected:
 	bool bIsAgressive = false;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bShouldRespawn = true;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Damage = 20.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float KillXP = 10.f;
 
 	FTimerHandle AutodestructionHandle;
 	
@@ -55,4 +61,7 @@ public:
 private:
 	UFUNCTION()
 	void CallDestroy();
+
+	UFUNCTION(BlueprintCallable)
+	void ManageRespawn() const;
 };

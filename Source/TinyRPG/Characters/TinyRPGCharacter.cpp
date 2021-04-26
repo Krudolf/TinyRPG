@@ -35,6 +35,9 @@ ATinyRPGCharacter::ATinyRPGCharacter()
 	LevelComponent = CreateDefaultSubobject<ULevelComponent>(TEXT("LevelComponent"));
 
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
+	HealthComponent->SetRestoreHealth(false);
+
+	LevelComponent->OnLevelUp.AddDynamic(HealthComponent, &UHealthComponent::RestoreFullHealth);
 }
 
 // Called when the game starts or when spawned

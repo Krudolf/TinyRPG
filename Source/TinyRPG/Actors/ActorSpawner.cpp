@@ -23,14 +23,10 @@ AActorSpawner::AActorSpawner()
 void AActorSpawner::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	while(SpawnedAnimals.Num() < MaxSpawnQuantity)
-	{
-		SpawnedAnimals.Add(SpawnActor());
-	}
+
+	SpawnAllActors();
 
 	OnSpawnNewActor.AddDynamic(this, &AActorSpawner::ManageSpawnNewActor);
-	GetWorld()->GetTimerManager().SetTimer(CheckSpawnedAnimalsHandle, this, &AActorSpawner::ManageSpawnNewActor, SpawnTime, true);
 }
 
 // Called every frame
@@ -40,25 +36,32 @@ void AActorSpawner::Tick(float DeltaTime)
 
 }
 
-AAnimal* AActorSpawner::SpawnActor()
+void AActorSpawner::SpawnActor()
 {
 	const FVector SpawnPoint(FMath::RandPointInBox(SpawnZone->Bounds.GetBox()));
 	FActorSpawnParameters SpawnParameters;
 	SpawnParameters.Owner = this;
 	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 	
-	return GetWorld()->SpawnActor<AAnimal>(ActorToSpawnClass, SpawnPoint, FRotator::ZeroRotator, SpawnParameters);
+	AAnimal* NewAnimal = GetWorld()->SpawnActor<AAnimal>(ActorToSpawnClass, SpawnPoint, FRotator::ZeroRotator, SpawnParameters);
+	NewAnimal->SetOwner(this);
+}
+
+void AActorSpawner::SpawnAllActors()
+{
+	while(CurrentAliveActors < MaxSpawnQuantity)
+	{
+		SpawnActor();
+		CurrentAliveActors++;
+	}
 }
 
 void AActorSpawner::ManageSpawnNewActor()
 {
-	for(int32 i = 0; i < SpawnedAnimals.Num(); i++)
+	CurrentAliveActors--;
+	if(!GetWorld()->GetTimerManager().IsTimerActive(CheckSpawnAllActorsHandle))
 	{
-		AAnimal* CurrentAnimal = SpawnedAnimals[i];
-		if(!IsValid(CurrentAnimal))
-		{
-			SpawnedAnimals[i] = SpawnActor();
-		}
+		GetWorld()->GetTimerManager().SetTimer(CheckSpawnAllActorsHandle, this, &AActorSpawner::SpawnAllActors, SpawnTime, false);
 	}
 }
 

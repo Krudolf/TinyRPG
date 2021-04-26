@@ -72,6 +72,9 @@ void ULevelComponent::LevelUp()
 		CurrentXP = 0;
 		BufferXP = 0;
 		AddXP(RemainingXP);
+
+		OnLevelUp.Broadcast();
+		
 		const FVector SpawnLocation = FVector::UpVector * -20 + GetOwner()->GetActorLocation();
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), EmitterLevelUp, SpawnLocation, FRotator::ZeroRotator, true, EPSCPoolMethod::None, true);
 	}

@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "LevelComponent.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelUp);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TINYRPG_API ULevelComponent : public UActorComponent
@@ -53,4 +54,8 @@ public:
 	void AddXP(const float AddedXP);
 
 	void LevelUp();
+
+	// Event dispatcher
+	UPROPERTY(BlueprintAssignable)
+	FLevelUp OnLevelUp;
 };

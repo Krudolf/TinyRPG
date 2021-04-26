@@ -27,7 +27,12 @@ protected:
 	float MaxHealth = 100.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bRestoreHealth = true;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsDead = false;
+
+	FTimerHandle RestoreHealthHandle;
 
 public:	
 	// Called every frame
@@ -40,7 +45,12 @@ public:
 	UFUNCTION(BlueprintPure)
 	float GetHealthNormalized() const;
 
+	UFUNCTION()
+	void RestoreFullHealth();
+
 	FORCEINLINE bool IsDead() const {return bIsDead;};
 	FORCEINLINE float GetHealth() const {return Health;};
 	FORCEINLINE float GetMaxHealth() const {return MaxHealth;};
+
+	FORCEINLINE void SetRestoreHealth(const bool bShouldRestoreHealth) { this->bRestoreHealth = bShouldRestoreHealth; };
 };

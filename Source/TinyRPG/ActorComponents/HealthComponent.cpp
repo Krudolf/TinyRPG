@@ -9,7 +9,6 @@ UHealthComponent::UHealthComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
-
 }
 
 
@@ -17,7 +16,6 @@ UHealthComponent::UHealthComponent()
 void UHealthComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
 }
 
 
@@ -31,9 +29,15 @@ void UHealthComponent::ApplyDamage(const float Damage)
 {
 	Health = FMath::Max(Health - Damage, 0.f);
 
+	if(bRestoreHealth)
+	{
+		GetWorld()->GetTimerManager().SetTimer(RestoreHealthHandle, this, &UHealthComponent::RestoreFullHealth, 30.f, false);
+	}
+	
 	if(Health == 0.f)
 	{
 		bIsDead = true;
+		GetWorld()->GetTimerManager().ClearTimer(RestoreHealthHandle);
 	}
 }
 
@@ -47,3 +51,8 @@ float UHealthComponent::GetHealthNormalized() const
 	return Health / MaxHealth;
 }
 
+void UHealthComponent::RestoreFullHealth()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Restore Health for %s"), *GetOwner()->GetName());
+	Health = MaxHealth;
+}

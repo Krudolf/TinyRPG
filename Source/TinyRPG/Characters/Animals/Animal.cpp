@@ -3,6 +3,7 @@
 
 #include "Animal.h"
 
+#include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "TinyRPG/ActorComponents/HealthComponent.h"
 #include "TinyRPG/ActorComponents/LevelComponent.h"
@@ -15,8 +16,10 @@ AAnimal::AAnimal()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
+	DamageBox = CreateDefaultSubobject<UBoxComponent>(TEXT("DamageBox"));
+	DamageBox->SetupAttachment(RootComponent);
+	
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
-
 }
 
 // Called when the game starts or when spawned
@@ -39,21 +42,28 @@ float AAnimal::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, A
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
 	HealthComponent->ApplyDamage(DamageAmount);
+
+	bIsHitted = true;
 	
 	if(HealthComponent->IsDead())
 	{
+		bIsHitted = false;
 		if(bShouldRespawn)
 		{
 			ManageRespawn();
 		}
 
-		if(ULevelComponent* LevelComponent = Cast<ULevelComponent>(DamageCauser->GetComponentByClass(ULevelComponent::StaticClass())))
+		if(DamageCauser->ActorHasTag("Weapon"))
 		{
-			LevelComponent->AddXP(KillXP);
+			if(ULevelComponent* LevelComponent = Cast<ULevelComponent>(DamageCauser->GetOwner()->GetComponentByClass(ULevelComponent::StaticClass())))
+			{
+				LevelComponent->AddXP(KillXP);
+			}	
 		}
 		
 		PlayAnimDeath();
 		GetController()->UnPossess();
+		DamageBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		GetWorld()->GetTimerManager().SetTimer(AutodestructionHandle, this, &AAnimal::CallDestroy, 5.f, false);

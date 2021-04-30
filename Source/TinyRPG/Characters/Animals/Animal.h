@@ -8,6 +8,7 @@
 #include "GameFramework/Character.h"
 #include "Animal.generated.h"
 
+class UBoxComponent;
 class UHealthComponent;
 
 UCLASS()
@@ -22,6 +23,9 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+    UBoxComponent* DamageBox;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UHealthComponent* HealthComponent;
@@ -40,6 +44,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float KillXP = 10.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsHitted = false;
 
 	FTimerHandle AutodestructionHandle;
 	

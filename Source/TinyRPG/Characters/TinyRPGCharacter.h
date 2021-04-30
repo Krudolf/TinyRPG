@@ -6,6 +6,7 @@
 
 #include "Components/WidgetComponent.h"
 #include "GameFramework/Character.h"
+#include "TinyRPG/Actors/Weapons/Weapon.h"
 
 
 #include "TinyRPGCharacter.generated.h"
@@ -64,6 +65,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UHealthComponent* HealthComponent;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<AWeapon> WeaponClass;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	AWeapon* EquippedWeapon = nullptr;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -75,15 +82,20 @@ public:
     void Interaction();
 
 	UPROPERTY(BlueprintReadOnly)
-	APickUpActor* OverlapingPickUpActor;
+	APickUpActor* OverlappingPickUpActor;
 
 private:
 	void MoveForward(float AxisValue);
 	void MoveRight(float AxisValue);
 	bool GetHittedActor(FHitResult& OutHit, FVector& OutHitDirection, float Distance) const;
-	void Hit();
+	// void Attack();
 	void ToggleInventory();
+	
+	void SpawnAndAttachWeapon();
 
 protected:
 	void UseItem(FKey Key);
+
+public:
+	FORCEINLINE float GetDamage() const { return Damage; };
 };

@@ -53,19 +53,21 @@ void ATinyRPGCharacter::BeginPlay()
 		PlayerController->CreateInventory();
 		PlayerController->SetInputMode(FInputModeGameOnly());
 	}
+
+	SpawnAndAttachWeapon();
 }
 
 void ATinyRPGCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (OtherActor != nullptr && OtherActor != this && OtherComp != nullptr)
 	{
-		OverlapingPickUpActor = Cast<APickUpActor>(OtherActor);
+		OverlappingPickUpActor = Cast<APickUpActor>(OtherActor);
 	}
 }
 
 void ATinyRPGCharacter::OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	OverlapingPickUpActor = nullptr;
+	OverlappingPickUpActor = nullptr;
 }
 
 float ATinyRPGCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
@@ -106,7 +108,7 @@ void ATinyRPGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction(TEXT("Interact"), IE_Pressed, this, &ATinyRPGCharacter::Interaction);
-	PlayerInputComponent->BindAction(TEXT("Hit"), IE_Pressed, this, &ATinyRPGCharacter::Hit);
+	// PlayerInputComponent->BindAction(TEXT("Attack"), IE_Pressed, this, &ATinyRPGCharacter::Attack);
 	PlayerInputComponent->BindAction(TEXT("Inventory"), IE_Pressed, this, &ATinyRPGCharacter::ToggleInventory);
 	//PlayerInputComponent->BindAction(TEXT("SelectItem"), IE_Pressed, this, &ATinyRPGCharacter::UseItem);
 }
@@ -140,32 +142,32 @@ bool ATinyRPGCharacter::GetHittedActor(FHitResult& OutHit, FVector& OutHitDirect
 
 void ATinyRPGCharacter::Interaction()
 {
-	if (OverlapingPickUpActor == nullptr || InventoryComponent == nullptr)
+	if (OverlappingPickUpActor == nullptr || InventoryComponent == nullptr)
 	{
 		return;
 	}
 
-	InventoryComponent->AddToInventory(OverlapingPickUpActor);
+	InventoryComponent->AddToInventory(OverlappingPickUpActor);
 }
 
-void ATinyRPGCharacter::Hit()
-{
-	FHitResult Hit;
-	FVector HitDirection;
-	bool bSuccess = GetHittedActor(Hit, HitDirection, HitDistance);
-	if (bSuccess)
-	{
-		DrawDebugPoint(GetWorld(), Hit.Location, 20, FColor::Red, false, 2);
-		UE_LOG(LogTemp, Warning, TEXT("Hitted actor %s"), *Hit.Actor->GetName());
-
-		AActor* ActorHitted = Hit.GetActor();
-		if (ActorHitted != nullptr)
-		{
-			FPointDamageEvent PointDamageEvent(Damage, Hit, HitDirection, nullptr);
-			ActorHitted->TakeDamage(Damage, PointDamageEvent, GetController(), this);
-		}
-	}
-}
+// void ATinyRPGCharacter::Attack()
+// {
+// 	// FHitResult Hit;
+// 	// FVector HitDirection;
+// 	// bool bSuccess = GetHittedActor(Hit, HitDirection, HitDistance);
+// 	// if (bSuccess)
+// 	// {
+// 	// 	DrawDebugPoint(GetWorld(), Hit.Location, 20, FColor::Red, false, 2);
+// 	// 	UE_LOG(LogTemp, Warning, TEXT("Hitted actor %s"), *Hit.Actor->GetName());
+// 	//
+// 	// 	AActor* ActorHitted = Hit.GetActor();
+// 	// 	if (ActorHitted != nullptr)
+// 	// 	{
+// 	// 		FPointDamageEvent PointDamageEvent(Damage, Hit, HitDirection, nullptr);
+// 	// 		ActorHitted->TakeDamage(Damage, PointDamageEvent, GetController(), this);
+// 	// 	}
+// 	// }
+// }
 
 void ATinyRPGCharacter::ToggleInventory() 
 {
@@ -174,4 +176,16 @@ void ATinyRPGCharacter::ToggleInventory()
 	{
 		PlayerController->ToggleInventoryVisibility();
 	}
+}
+
+void ATinyRPGCharacter::SpawnAndAttachWeapon()
+{
+	FActorSpawnParameters SpawnParameters;
+	SpawnParameters.Owner = this;
+	SpawnParameters.Instigator = this;
+	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	EquippedWeapon = GetWorld()->SpawnActor<AWeapon>(WeaponClass, SpawnParameters);
+	
+	const FName RightWeaponSocketName = "RightHandWeapon";
+	EquippedWeapon->AttachToComponent(this->GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, RightWeaponSocketName);
 }

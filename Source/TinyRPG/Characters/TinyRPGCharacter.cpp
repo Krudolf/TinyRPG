@@ -186,6 +186,19 @@ void ATinyRPGCharacter::SpawnAndAttachWeapon()
 	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	EquippedWeapon = GetWorld()->SpawnActor<AWeapon>(WeaponClass, SpawnParameters);
 	
+	AttachWeaponToSheathSocket();
+}
+
+void ATinyRPGCharacter::AttachWeaponToHandSocket() {
 	const FName RightWeaponSocketName = "RightHandWeapon";
 	EquippedWeapon->AttachToComponent(this->GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, RightWeaponSocketName);
+
+	bIsWeaponSheathed = false;
+}
+
+void ATinyRPGCharacter::AttachWeaponToSheathSocket() {
+	const FName SwordSheathSocket = "SwordSheath";
+	EquippedWeapon->AttachToComponent(this->GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, SwordSheathSocket);
+
+	bIsWeaponSheathed = true;
 }

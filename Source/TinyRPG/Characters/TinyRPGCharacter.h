@@ -71,6 +71,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	AWeapon* EquippedWeapon = nullptr;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsWeaponSheathed = true;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -97,5 +100,11 @@ protected:
 	void UseItem(FKey Key);
 
 public:
+	UFUNCTION(BlueprintCallable)
+	void AttachWeaponToHandSocket();
+
+	UFUNCTION(BlueprintCallable)
+	void AttachWeaponToSheathSocket();
+	
 	FORCEINLINE float GetDamage() const { return Damage; };
 };

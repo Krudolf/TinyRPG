@@ -2,6 +2,7 @@
 
 
 #include "TinyRPGCharacter.h"
+
 #include "DrawDebugHelpers.h"
 #include "Blueprint/WidgetBlueprintLibrary.h"
 #include "TinyRPG/Actors/PickUpActor.h"
@@ -9,6 +10,9 @@
 #include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "TinyRPG/TinyRPGGameModeBase.h"
+#include "TinyRPG/AbilitySystem/TinyRPGAbilitySystemComponent.h"
+#include "TinyRPG/AbilitySystem/TinyRPGAttributeSet.h"
+#include "TinyRPG/AbilitySystem/TinyRPGGameplayAbility.h"
 #include "TinyRPG/ActorComponents/HealthComponent.h"
 #include "TinyRPG/ActorComponents/InventoryComponent.h"
 #include "TinyRPG/ActorComponents/QuestLogComponent.h"
@@ -38,6 +42,12 @@ ATinyRPGCharacter::ATinyRPGCharacter()
 	HealthComponent->SetRestoreHealth(false);
 
 	LevelComponent->OnLevelUp.AddDynamic(HealthComponent, &UHealthComponent::RestoreFullHealth);
+
+	AbilitySystemComponent = CreateDefaultSubobject<UTinyRPGAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
+	AbilitySystemComponent->SetIsReplicated(true);
+	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Full);
+
+	Attributes = CreateDefaultSubobject<UTinyRPGAttributeSet>(TEXT("Attributes"));
 }
 
 // Called when the game starts or when spawned
@@ -111,6 +121,69 @@ void ATinyRPGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	// PlayerInputComponent->BindAction(TEXT("Attack"), IE_Pressed, this, &ATinyRPGCharacter::Attack);
 	PlayerInputComponent->BindAction(TEXT("Inventory"), IE_Pressed, this, &ATinyRPGCharacter::ToggleInventory);
 	//PlayerInputComponent->BindAction(TEXT("SelectItem"), IE_Pressed, this, &ATinyRPGCharacter::UseItem);
+
+	if(AbilitySystemComponent && InputComponent)
+	{
+		const FGameplayAbilityInputBinds Binds("Confirm", "Cancel", "ETinyRPGAbilityInputId", static_cast<int32>(ETinyRPGAbilityInputId::Confirm), static_cast<int32>(ETinyRPGAbilityInputId::Cancel));
+		AbilitySystemComponent->BindAbilityActivationToInputComponent(InputComponent, Binds);
+	}
+}
+
+UAbilitySystemComponent* ATinyRPGCharacter::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
+}
+
+void ATinyRPGCharacter::InitializeAttributes()
+{
+	if(AbilitySystemComponent && DefaultAttributeEffect)
+	{
+		FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
+		EffectContext.AddSourceObject(this);
+
+		const FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(DefaultAttributeEffect, 1, EffectContext);
+
+		if(SpecHandle.IsValid())
+		{
+			FActiveGameplayEffectHandle GEHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+		}
+	}
+}
+
+void ATinyRPGCharacter::GiveAbilities()
+{
+	if(HasAuthority() && AbilitySystemComponent)
+	{
+		for(TSubclassOf<UTinyRPGGameplayAbility>& StartupAbility : DefaultAbilities)
+		{
+			AbilitySystemComponent->GiveAbility(
+				FGameplayAbilitySpec(StartupAbility, 1, static_cast<int32>(StartupAbility.GetDefaultObject()->AbilityInputId), this));
+		}
+	}
+}
+
+void ATinyRPGCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+
+	InitializeAttributes();
+	GiveAbilities();
+}
+
+void ATinyRPGCharacter::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+
+	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+	InitializeAttributes();
+	
+	if(AbilitySystemComponent && InputComponent)
+	{
+		const FGameplayAbilityInputBinds Binds("Confirm", "Cancel", "ETinyRPGAbilityInputId", static_cast<int32>(ETinyRPGAbilityInputId::Confirm), static_cast<int32>(ETinyRPGAbilityInputId::Cancel));
+		AbilitySystemComponent->BindAbilityActivationToInputComponent(InputComponent, Binds);
+	}
 }
 
 void ATinyRPGCharacter::MoveForward(float AxisValue)

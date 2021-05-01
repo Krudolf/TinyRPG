@@ -4,3 +4,11 @@
 
 #include "CoreMinimal.h"
 
+UENUM(BlueprintType)
+enum class ETinyRPGAbilityInputId : uint8
+{
+	None,
+	Confirm,
+	Cancel,
+	Attack
+};

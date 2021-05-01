@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 
+#include "AbilitySystemInterface.h"
+#include <GameplayEffectTypes.h>
 #include "Components/WidgetComponent.h"
 #include "GameFramework/Character.h"
 #include "TinyRPG/Actors/Weapons/Weapon.h"
@@ -18,7 +20,7 @@ class ULevelComponent;
 class UHealthComponent;
 
 UCLASS()
-class TINYRPG_API ATinyRPGCharacter : public ACharacter
+class TINYRPG_API ATinyRPGCharacter : public ACharacter, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
@@ -49,6 +51,12 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	ULevelComponent* LevelComponent;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	class UTinyRPGAbilitySystemComponent* AbilitySystemComponent;
+
+	UPROPERTY()
+	class UTinyRPGAttributeSet* Attributes;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float InteractionDistance = 600.f;
@@ -86,6 +94,20 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 	APickUpActor* OverlappingPickUpActor;
+
+	virtual class UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+
+	virtual void InitializeAttributes();
+	virtual void GiveAbilities();
+
+	virtual void PossessedBy(AController* NewController) override;
+	virtual void OnRep_PlayerState() override;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "TinyRPG")
+	TSubclassOf<class UGameplayEffect> DefaultAttributeEffect;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "TinyRPG")
+	TArray<TSubclassOf<class UTinyRPGGameplayAbility>> DefaultAbilities;
 
 private:
 	void MoveForward(float AxisValue);

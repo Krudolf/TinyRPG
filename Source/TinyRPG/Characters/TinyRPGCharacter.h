@@ -9,6 +9,7 @@
 #include "Components/WidgetComponent.h"
 #include "GameFramework/Character.h"
 #include "TinyRPG/Actors/Weapons/Weapon.h"
+#include "TinyRPG/Interfaces/AttackInterface.h"
 
 
 #include "TinyRPGCharacter.generated.h"
@@ -20,7 +21,7 @@ class ULevelComponent;
 class UHealthComponent;
 
 UCLASS()
-class TINYRPG_API ATinyRPGCharacter : public ACharacter, public IAbilitySystemInterface
+class TINYRPG_API ATinyRPGCharacter : public ACharacter, public IAbilitySystemInterface, public IAttackInterface
 {
 	GENERATED_BODY()
 

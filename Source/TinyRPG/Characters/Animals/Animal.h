@@ -6,29 +6,23 @@
 
 
 #include "GameFramework/Character.h"
+#include "TinyRPG/Characters/TinyRPGCharacter.h"
+
 #include "Animal.generated.h"
 
-class UBoxComponent;
-class UHealthComponent;
-
 UCLASS()
-class TINYRPG_API AAnimal : public ACharacter
+class TINYRPG_API AAnimal : public ATinyRPGCharacter
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this pawn's properties
 	AAnimal();
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-    UBoxComponent* DamageBox;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UHealthComponent* HealthComponent;
+    class UBoxComponent* DamageBox;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bIsResting = false;
@@ -38,9 +32,6 @@ protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bShouldRespawn = true;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float Damage = 20.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float KillXP = 10.f;
@@ -51,19 +42,9 @@ protected:
 	FTimerHandle AutodestructionHandle;
 	
 public:
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
-
-	UFUNCTION(BlueprintImplementableEvent)
-	void PlayAnimDeath();
-	
-	UFUNCTION(BlueprintCallable)
-	void Attack();
-	
-	UFUNCTION(BlueprintImplementableEvent)
-	void PlayAttackAnimation();
 
 private:
 	UFUNCTION()

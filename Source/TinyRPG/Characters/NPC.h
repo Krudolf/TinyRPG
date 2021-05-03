@@ -3,13 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
+
+#include "TinyRPGCharacter.h"
 #include "TinyRPG/QuestSystem/InteractInterface.h"
 
 #include "NPC.generated.h"
 
 UCLASS()
-class TINYRPG_API ANPC : public ACharacter, public IInteractInterface
+class TINYRPG_API ANPC : public ATinyRPGCharacter, public IInteractInterface
 {
 	GENERATED_BODY()
 

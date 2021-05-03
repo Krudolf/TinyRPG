@@ -10,26 +10,22 @@
 #include "TinyRPG/Actors/ActorSpawner.h"
 
 
-// Sets default values
 AAnimal::AAnimal()
 {
- 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
 	DamageBox = CreateDefaultSubobject<UBoxComponent>(TEXT("DamageBox"));
 	DamageBox->SetupAttachment(RootComponent);
 	
-	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
+	HealthComponent->SetRestoreHealth(true);
 }
 
-// Called when the game starts or when spawned
 void AAnimal::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
-// Called every frame
 void AAnimal::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -61,7 +57,7 @@ float AAnimal::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, A
 			}	
 		}
 		
-		PlayAnimDeath();
+		PlayDeathAnimation();
 		GetController()->UnPossess();
 		DamageBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
@@ -72,10 +68,6 @@ float AAnimal::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, A
 	return DamageAmount;
 }
 
-void AAnimal::Attack()
-{
-	PlayAttackAnimation();
-}
 
 void AAnimal::CallDestroy()
 {

@@ -34,9 +34,6 @@ AMainCharacter::AMainCharacter()
 	QuestLogComponent = CreateDefaultSubobject<UQuestLogComponent>(TEXT("QuestLogComponent"));
 	LevelComponent = CreateDefaultSubobject<ULevelComponent>(TEXT("LevelComponent"));
 
-	HealthComponent->SetRestoreHealth(false);
-	LevelComponent->OnLevelUp.AddDynamic(HealthComponent, &UHealthComponent::RestoreFullHealth);
-
 	Tags.Add("Player");
 }
 
@@ -72,18 +69,18 @@ void AMainCharacter::OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, cla
 float AMainCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
 	AActor* DamageCauser)
 {
-	if(HealthComponent->IsDead())
-	{
-		return 0.f;
-	}
-	
-	HealthComponent->ApplyDamage(DamageAmount);
-
-	if(HealthComponent->IsDead())
-	{
-		PlayDeathAnimation();
-		DisableInput(UGameplayStatics::GetPlayerController(this, 0));
-	}
+	// if(HealthComponent->IsDead())
+	// {
+	// 	return 0.f;
+	// }
+	//
+	// HealthComponent->ApplyDamage(DamageAmount);
+	//
+	// if(HealthComponent->IsDead())
+	// {
+	// 	PlayDeathAnimation();
+	// 	DisableInput(UGameplayStatics::GetPlayerController(this, 0));
+	// }
 
 	return DamageAmount;
 }

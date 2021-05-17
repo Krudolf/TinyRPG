@@ -53,9 +53,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Damage = 25.f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UHealthComponent* HealthComponent;
-
 	UPROPERTY(BlueprintReadWrite)
 	class UAnimMontage* NextAttackAnimation;
 
@@ -79,6 +76,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	float GetHealth() const;
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	float GetMaxHealth() const;
 
 	FORCEINLINE float GetDamage() const { return Damage; };
 };

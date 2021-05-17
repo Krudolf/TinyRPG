@@ -10,7 +10,6 @@
 #include "TinyRPG/AbilitySystem/TinyRPGAbilitySystemComponent.h"
 #include "TinyRPG/AbilitySystem/TinyRPGAttributeSet.h"
 #include "TinyRPG/AbilitySystem/TinyRPGGameplayAbility.h"
-#include "TinyRPG/ActorComponents/HealthComponent.h"
 #include "TinyRPG/ActorComponents/InventoryComponent.h"
 
 #define OUT
@@ -18,9 +17,6 @@
 ATinyRPGCharacter::ATinyRPGCharacter()
 {
 	PrimaryActorTick.bCanEverTick = false;
-
-	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
-	HealthComponent->SetRestoreHealth(false);
 
 	AbilitySystemComponent = CreateDefaultSubobject<UTinyRPGAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
 	AbilitySystemComponent->SetIsReplicated(true);
@@ -37,21 +33,21 @@ void ATinyRPGCharacter::BeginPlay()
 float ATinyRPGCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
 	AActor* DamageCauser)
 {
-	if(HealthComponent->IsDead())
-	{
-		return 0.f;
-	}
-	
-	HealthComponent->ApplyDamage(DamageAmount);
-
-	if(HealthComponent->IsDead())
-	{
-		PlayDeathAnimation();
-		if(ActorHasTag("Player"))
-		{
-			DisableInput(UGameplayStatics::GetPlayerController(this, 0));
-		}
-	}
+	// if(HealthComponent->IsDead())
+	// {
+	// 	return 0.f;
+	// }
+	//
+	// HealthComponent->ApplyDamage(DamageAmount);
+	//
+	// if(HealthComponent->IsDead())
+	// {
+	// 	PlayDeathAnimation();
+	// 	if(ActorHasTag("Player"))
+	// 	{
+	// 		DisableInput(UGameplayStatics::GetPlayerController(this, 0));
+	// 	}
+	// }
 
 	return DamageAmount;
 }
@@ -137,4 +133,9 @@ void ATinyRPGCharacter::OnRep_PlayerState()
 float ATinyRPGCharacter::GetHealth() const
 {
 	return Attributes->GetHealth();
+}
+
+float ATinyRPGCharacter::GetMaxHealth() const
+{
+	return Attributes->GetMaxHealth();
 }

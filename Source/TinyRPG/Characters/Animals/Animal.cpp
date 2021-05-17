@@ -16,8 +16,6 @@ AAnimal::AAnimal()
 
 	DamageBox = CreateDefaultSubobject<UBoxComponent>(TEXT("DamageBox"));
 	DamageBox->SetupAttachment(RootComponent);
-	
-	HealthComponent->SetRestoreHealth(true);
 }
 
 void AAnimal::BeginPlay()

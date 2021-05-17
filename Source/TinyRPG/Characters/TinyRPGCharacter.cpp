@@ -21,6 +21,12 @@ ATinyRPGCharacter::ATinyRPGCharacter()
 
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
 	HealthComponent->SetRestoreHealth(false);
+
+	AbilitySystemComponent = CreateDefaultSubobject<UTinyRPGAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
+	AbilitySystemComponent->SetIsReplicated(true);
+	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Full);
+
+	Attributes = CreateDefaultSubobject<UTinyRPGAttributeSet>(TEXT("Attributes"));
 }
 
 void ATinyRPGCharacter::BeginPlay()
@@ -50,10 +56,20 @@ float ATinyRPGCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Dama
 	return DamageAmount;
 }
 
+void ATinyRPGCharacter::HandleDamage(float DamageAmount, const FHitResult& HitInfo,
+	const FGameplayTagContainer& DamageTags, ATinyRPGCharacter* InstigatorCharacter, AActor* DamageCauser)
+{
+	OnDamaged(DamageAmount, HitInfo, DamageTags, InstigatorCharacter, DamageCauser);
+}
+
+void ATinyRPGCharacter::HandleHealthChanged(float DeltaValue, const FGameplayTagContainer& EventTags)
+{
+	OnHealthChanged(DeltaValue, EventTags);
+}
+
 void ATinyRPGCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void ATinyRPGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -98,13 +114,10 @@ void ATinyRPGCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 
-	if(ActorHasTag("Player"))
-	{
-		AbilitySystemComponent->InitAbilityActorInfo(this, this);
+	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 
-		InitializeAttributes();
-		GiveAbilities();
-	}
+	InitializeAttributes();
+	GiveAbilities();
 }
 
 void ATinyRPGCharacter::OnRep_PlayerState()
@@ -119,4 +132,9 @@ void ATinyRPGCharacter::OnRep_PlayerState()
 		const FGameplayAbilityInputBinds Binds("Confirm", "Cancel", "ETinyRPGAbilityInputId", static_cast<int32>(ETinyRPGAbilityInputId::Confirm), static_cast<int32>(ETinyRPGAbilityInputId::Cancel));
 		AbilitySystemComponent->BindAbilityActivationToInputComponent(InputComponent, Binds);
 	}
+}
+
+float ATinyRPGCharacter::GetHealth() const
+{
+	return Attributes->GetHealth();
 }

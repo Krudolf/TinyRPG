@@ -37,12 +37,6 @@ AMainCharacter::AMainCharacter()
 	HealthComponent->SetRestoreHealth(false);
 	LevelComponent->OnLevelUp.AddDynamic(HealthComponent, &UHealthComponent::RestoreFullHealth);
 
-	AbilitySystemComponent = CreateDefaultSubobject<UTinyRPGAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
-	AbilitySystemComponent->SetIsReplicated(true);
-	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Full);
-
-	Attributes = CreateDefaultSubobject<UTinyRPGAttributeSet>(TEXT("Attributes"));
-
 	Tags.Add("Player");
 }
 

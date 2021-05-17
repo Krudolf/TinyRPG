@@ -32,20 +32,37 @@ public:
 	FGameplayAttributeData Health;
 	ATTRIBUTE_ACCESSORS(UTinyRPGAttributeSet, Health);
 
-	UFUNCTION()
-	virtual void OnRep_Health(const FGameplayAttributeData& OldHealth);
+	UPROPERTY(BlueprintReadOnly, Category = "Attributes", ReplicatedUsing = OnRep_MaxHealth)
+	FGameplayAttributeData MaxHealth;
+	ATTRIBUTE_ACCESSORS(UTinyRPGAttributeSet, MaxHealth);
 
 	UPROPERTY(BlueprintReadOnly, Category = "Attributes", ReplicatedUsing = OnRep_Stamina)
 	FGameplayAttributeData Stamina;
 	ATTRIBUTE_ACCESSORS(UTinyRPGAttributeSet, Stamina);
 
-	UFUNCTION()
-	virtual void OnRep_Stamina(const FGameplayAttributeData& OldStamina);
-
 	UPROPERTY(BlueprintReadOnly, Category = "Attributes", ReplicatedUsing = OnRep_AttackPower)
 	FGameplayAttributeData AttackPower;
 	ATTRIBUTE_ACCESSORS(UTinyRPGAttributeSet, AttackPower);
 
+	UPROPERTY(BlueprintReadOnly, Category = "Attributes", ReplicatedUsing = OnRep_Damage)
+	FGameplayAttributeData Damage;
+	ATTRIBUTE_ACCESSORS(UTinyRPGAttributeSet, Damage)
+
+	UFUNCTION()
+	virtual void OnRep_Health(const FGameplayAttributeData& OldHealth);
+
+	UFUNCTION()
+	virtual void OnRep_MaxHealth(const FGameplayAttributeData& OldMaxHealth);	
+
+	UFUNCTION()
+	virtual void OnRep_Stamina(const FGameplayAttributeData& OldStamina);
+	
 	UFUNCTION()
 	virtual void OnRep_AttackPower(const FGameplayAttributeData& OldAttackPower);
+
+	UFUNCTION()
+	virtual void OnRep_Damage(const FGameplayAttributeData& OldDamage);
+
+protected:
+	void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data);
 };

@@ -44,7 +44,8 @@ protected:
 public:
 	virtual void Tick(float DeltaTime) override;
 
-	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+	UFUNCTION(BlueprintCallable)
+	void ManageDeath();
 
 private:
 	UFUNCTION()

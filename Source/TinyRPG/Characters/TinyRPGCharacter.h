@@ -8,6 +8,7 @@
 #include <GameplayEffectTypes.h>
 #include "Components/WidgetComponent.h"
 #include "GameFramework/Character.h"
+#include "TinyRPG/AbilitySystem/TinyRPGAttributeSet.h"
 #include "TinyRPG/Interfaces/AttackInterface.h"
 
 #include "TinyRPGCharacter.generated.h"
@@ -25,6 +26,17 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+
+	virtual void HandleDamage(float DamageAmount, const FHitResult& HitInfo, const struct FGameplayTagContainer& DamageTags, ATinyRPGCharacter* InstigatorCharacter, AActor* DamageCauser);
+	virtual void HandleHealthChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags);
+
+	friend UTinyRPGAttributeSet;
+	
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnDamaged(float DamageAmount, const FHitResult& HitInfo, const struct FGameplayTagContainer& DamageTags, ATinyRPGCharacter* InstigatorCharacter, AActor* DamageCauser);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnHealthChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags);
 	
 	UFUNCTION(BlueprintImplementableEvent)
 	void PlayDeathAnimation();
@@ -64,6 +76,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "TinyRPG")
 	TArray<TSubclassOf<class UTinyRPGGameplayAbility>> DefaultAbilities;
-	
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	float GetHealth() const;
+
 	FORCEINLINE float GetDamage() const { return Damage; };
 };

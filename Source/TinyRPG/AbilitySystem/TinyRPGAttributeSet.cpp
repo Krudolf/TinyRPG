@@ -127,6 +127,7 @@ void UTinyRPGAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCal
 			if (TargetCharacter)
 			{
 				// This is proper damage
+				UE_LOG(LogTemp, Warning, TEXT("TargetCharacter true"));
 				TargetCharacter->HandleDamage(LocalDamageDone, HitResult, SourceTags, SourceCharacter, SourceActor);
 
 				// Call for all health changes

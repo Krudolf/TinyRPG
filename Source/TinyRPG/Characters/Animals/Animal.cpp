@@ -5,6 +5,7 @@
 
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "TinyRPG/ActorComponents/HealthComponent.h"
 #include "TinyRPG/ActorComponents/LevelComponent.h"
 #include "TinyRPG/Actors/ActorSpawner.h"
@@ -37,13 +38,13 @@ void AAnimal::ManageDeath()
 		ManageRespawn();
 	}
 
-	// if(DamageCauser->ActorHasTag("Weapon"))
-	// {
-	// 	if(ULevelComponent* LevelComponent = Cast<ULevelComponent>(DamageCauser->GetOwner()->GetComponentByClass(ULevelComponent::StaticClass())))
-	// 	{
-	// 		LevelComponent->AddXP(KillXP);
-	// 	}	
-	// }
+	if(ACharacter* PlayerCharacter = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0))
+	{
+		if(ULevelComponent* LevelComponent = Cast<ULevelComponent>(PlayerCharacter->GetComponentByClass(ULevelComponent::StaticClass())))
+		{
+			LevelComponent->AddXP(KillXP);
+		}
+	}
 		
 	PlayDeathAnimation();
 	GetController()->UnPossess();

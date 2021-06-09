@@ -45,7 +45,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable)
-	void ManageDeath();
+	virtual void ManageDeath() override;
 
 private:
 	UFUNCTION()

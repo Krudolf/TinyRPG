@@ -25,7 +25,6 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 	virtual void HandleDamage(float DamageAmount, const FHitResult& HitInfo, const struct FGameplayTagContainer& DamageTags, ATinyRPGCharacter* InstigatorCharacter, AActor* DamageCauser);
 	virtual void HandleHealthChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags);
@@ -81,4 +80,7 @@ public:
 	float GetMaxHealth() const;
 
 	FORCEINLINE float GetDamage() const { return Damage; };
+
+private:
+	virtual void ManageDeath();
 };

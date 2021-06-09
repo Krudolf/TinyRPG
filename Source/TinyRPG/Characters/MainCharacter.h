@@ -28,8 +28,6 @@ protected:
 	UFUNCTION()
 	void OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
-	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	class UInventoryComponent* InventoryComponent;
 
@@ -71,10 +69,12 @@ private:
 	void MoveForward(float AxisValue);
 	void MoveRight(float AxisValue);
 	bool GetHittedActor(FHitResult& OutHit, FVector& OutHitDirection, float Distance) const;
-	// void Attack();
 	void ToggleInventory();
 	
 	void SpawnAndAttachWeapon();
+
+	UFUNCTION(BlueprintCallable)
+	virtual void ManageDeath() override;
 
 protected:
 	void UseItem(FKey Key);

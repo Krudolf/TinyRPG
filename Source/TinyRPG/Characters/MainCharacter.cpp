@@ -66,29 +66,9 @@ void AMainCharacter::OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, cla
 	OverlappingPickUpActor = nullptr;
 }
 
-float AMainCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
-	AActor* DamageCauser)
-{
-	// if(HealthComponent->IsDead())
-	// {
-	// 	return 0.f;
-	// }
-	//
-	// HealthComponent->ApplyDamage(DamageAmount);
-	//
-	// if(HealthComponent->IsDead())
-	// {
-	// 	PlayDeathAnimation();
-	// 	DisableInput(UGameplayStatics::GetPlayerController(this, 0));
-	// }
-
-	return DamageAmount;
-}
-
 void AMainCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -131,7 +111,6 @@ bool AMainCharacter::GetHittedActor(FHitResult& OutHit, FVector& OutHitDirection
 	CharacterController->GetPlayerViewPoint(OUT Location, OUT Rotation);
 
 	const FVector End = Location + Rotation.Vector() * Distance;
-	//DrawDebugLine(GetWorld(), Location, End, FColor::Red, false, 2);
 
 	OutHitDirection = -Rotation.Vector();
 	FCollisionQueryParams CollisionParams;
@@ -149,25 +128,6 @@ void AMainCharacter::Interaction()
 
 	InventoryComponent->AddToInventory(OverlappingPickUpActor);
 }
-
-// void AMainCharacter::Attack()
-// {
-// 	// FHitResult Hit;
-// 	// FVector HitDirection;
-// 	// bool bSuccess = GetHittedActor(Hit, HitDirection, HitDistance);
-// 	// if (bSuccess)
-// 	// {
-// 	// 	DrawDebugPoint(GetWorld(), Hit.Location, 20, FColor::Red, false, 2);
-// 	// 	UE_LOG(LogTemp, Warning, TEXT("Hitted actor %s"), *Hit.Actor->GetName());
-// 	//
-// 	// 	AActor* ActorHitted = Hit.GetActor();
-// 	// 	if (ActorHitted != nullptr)
-// 	// 	{
-// 	// 		FPointDamageEvent PointDamageEvent(Damage, Hit, HitDirection, nullptr);
-// 	// 		ActorHitted->TakeDamage(Damage, PointDamageEvent, GetController(), this);
-// 	// 	}
-// 	// }
-// }
 
 void AMainCharacter::ToggleInventory() 
 {
@@ -192,6 +152,12 @@ void AMainCharacter::SpawnAndAttachWeapon()
 	EquippedWeapon = GetWorld()->SpawnActor<AWeapon>(WeaponClass, SpawnParameters);
 	
 	AttachWeaponToSheathSocket();
+}
+
+void AMainCharacter::ManageDeath()
+{
+	PlayDeathAnimation();
+	DisableInput(UGameplayStatics::GetPlayerController(this, 0));
 }
 
 void AMainCharacter::AttachWeaponToHandSocket() {

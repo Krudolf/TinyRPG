@@ -30,28 +30,6 @@ void ATinyRPGCharacter::BeginPlay()
 	Super::BeginPlay();
 }
 
-float ATinyRPGCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
-	AActor* DamageCauser)
-{
-	// if(HealthComponent->IsDead())
-	// {
-	// 	return 0.f;
-	// }
-	//
-	// HealthComponent->ApplyDamage(DamageAmount);
-	//
-	// if(HealthComponent->IsDead())
-	// {
-	// 	PlayDeathAnimation();
-	// 	if(ActorHasTag("Player"))
-	// 	{
-	// 		DisableInput(UGameplayStatics::GetPlayerController(this, 0));
-	// 	}
-	// }
-
-	return DamageAmount;
-}
-
 void ATinyRPGCharacter::HandleDamage(float DamageAmount, const FHitResult& HitInfo,
 	const FGameplayTagContainer& DamageTags, ATinyRPGCharacter* InstigatorCharacter, AActor* DamageCauser)
 {
@@ -138,4 +116,8 @@ float ATinyRPGCharacter::GetHealth() const
 float ATinyRPGCharacter::GetMaxHealth() const
 {
 	return Attributes->GetMaxHealth();
+}
+
+void ATinyRPGCharacter::ManageDeath()
+{
 }

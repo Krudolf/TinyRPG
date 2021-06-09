@@ -26,5 +26,8 @@ public:
 	void Attack();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	bool CanAttack();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	UAnimMontage* PlayAttackMontage();
 };

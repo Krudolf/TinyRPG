@@ -79,6 +79,9 @@ private:
 protected:
 	void UseItem(FKey Key);
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void RestoreFullHealth();
+	
 public:
 	UFUNCTION(BlueprintCallable)
 	void AttachWeaponToHandSocket();

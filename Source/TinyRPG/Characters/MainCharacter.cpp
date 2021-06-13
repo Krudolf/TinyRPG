@@ -43,6 +43,8 @@ void AMainCharacter::BeginPlay()
 
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &AMainCharacter::OnOverlapBegin);
 	GetCapsuleComponent()->OnComponentEndOverlap.AddDynamic(this, &AMainCharacter::OnOverlapEnd);
+
+	LevelComponent->OnLevelUp.AddDynamic(this, &AMainCharacter::RestoreFullHealth);
 	
 	if(ATinyRPGPlayerController* PlayerController = Cast<ATinyRPGPlayerController>(GetController()))
 	{

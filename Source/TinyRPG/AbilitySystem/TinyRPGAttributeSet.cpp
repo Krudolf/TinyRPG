@@ -135,16 +135,16 @@ void UTinyRPGAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCal
 			}
 		}
 	}
-	// else if (Data.EvaluatedData.Attribute == GetHealthAttribute())
-	// {
-	// 	// Handle other health changes such as from healing or direct modifiers
-	// 	// First clamp it
-	// 	SetHealth(FMath::Clamp(GetHealth(), 0.0f, GetMaxHealth()));
-	//
-	// 	if (TargetCharacter)
-	// 	{
-	// 		// Call for all health changes
-	// 		TargetCharacter->HandleHealthChanged(DeltaValue, SourceTags);
-	// 	}
-	// }
+	else if (Data.EvaluatedData.Attribute == GetHealthAttribute())
+	{
+		// Handle other health changes such as from healing or direct modifiers
+		// First clamp it
+		SetHealth(FMath::Clamp(GetHealth(), 0.0f, GetMaxHealth()));
+	
+		if (TargetCharacter)
+		{
+			// Call for all health changes
+			TargetCharacter->HandleHealthChanged(DeltaValue, SourceTags);
+		}
+	}
 }

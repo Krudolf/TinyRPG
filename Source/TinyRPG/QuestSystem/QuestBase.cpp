@@ -3,6 +3,8 @@
 
 #include "QuestBase.h"
 
+#include "TinyRPG/structs/QuestData.h"
+
 // Sets default values
 AQuestBase::AQuestBase()
 {
@@ -37,6 +39,20 @@ void AQuestBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AQuestBase::Init(FQuestData* QuestData)
+{
+	QuestName = QuestData->Name;
+	Description = QuestData->Description;
+	Objectives = QuestData->Objectives;
+	bIsStoryQuest = QuestData->bIsStoryQuest;
+	bIsCompleted = QuestData->bIsCompleted;
+	RewardXP = QuestData->RewardXP;
+	TurnInDescription = QuestData->TurnInDescription;
+	TurnInTargetInteractionDescription = QuestData->TurnInTargetInteractionDescription;
+	TurnInTargetActor = nullptr; //TODO: Search by name
+	PreRequisiteQuest = nullptr; //TODO: Search by name
 }
 
 void AQuestBase::OrganiseQuestInEditor()

@@ -30,6 +30,9 @@ public:
 	AActor* Target;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString TargetName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 Number;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

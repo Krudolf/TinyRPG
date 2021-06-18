@@ -33,51 +33,57 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void Init(class FQuestData* QuestData);
+
 	UFUNCTION(CallInEditor)
     void OrganiseQuestInEditor();
 
+	void ChangeMaterial() const;
+
+protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	USceneComponent* SceneComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UStaticMeshComponent* StaticMesh;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	FString QuestName = TEXT("QuestName");
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	FString Description = TEXT("Description for the mission");
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TArray<FObjectiveData> Objectives;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bIsStoryQuest = true;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool bIsCompleted = false;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float RewardXP = 100.0f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
     FString TurnInDescription = TEXT("Have done that for me yet?");
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	FString TurnInTargetInteractionDescription = TEXT("");
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	AQuestBase* PreRequisiteQuest = nullptr;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Quest Base | Materials")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Quest Base | Materials")
 	UMaterial* CanAcceptMaterial;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Quest Base | Materials")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Quest Base | Materials")
 	UMaterial* AcceptedMaterial;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	AActor* TurnInTargetActor = nullptr;
 
+public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	AQuestBase* PreRequisiteQuest = nullptr;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool bIsCompleted = false;
+	
 	//Event dispatchers
 	UPROPERTY(BlueprintAssignable)
 	FLocationReachedDelegate OnLocationReached;
@@ -112,5 +118,5 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	bool IsQuestAcceptable() const;
 
-	void ChangeMaterial() const;
+	
 };
